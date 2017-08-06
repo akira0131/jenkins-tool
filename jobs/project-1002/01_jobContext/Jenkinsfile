@@ -15,6 +15,9 @@ stage('WU起動数監視')
 {
     node('master') { timestamps
     {
+        // 宣言
+        def stdout = new StringBuffer(), stderror = new StringBuffer()
+
         // 開始メッセージ
         printMsg('info', '-------------------------------------------------------')
         printMsg('info', 'WU起動数監視ステージ START')
