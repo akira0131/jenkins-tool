@@ -21,7 +21,12 @@ stage('WU起動数監視')
         printMsg('info', '-------------------------------------------------------')
 
         // AP設定ロード
-        loadEnvConfig()
+        try // nonserializable対策
+        {
+            config = ['path':'/opt/app/conf', 'file':'env.groovy']
+            env = new ConfigSlurper().parse(new File(config['path'] + "/" + config['file']).toURL())
+        }
+        catch(Exception e) {}
 
         // AP設定ロードに失敗している場合は、例外を投げる
         println 'envの中身チェック'
