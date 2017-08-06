@@ -52,6 +52,7 @@ stage('WU起動数監視')
         }
         catch(Exception e) {
             println ' 読み込めてない。'
+            throw e
         }
 
 
