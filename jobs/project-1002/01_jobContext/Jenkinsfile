@@ -34,8 +34,22 @@ stage('WU起動数監視')
         // Webap,batchサーバのみ実施
         for (server in ['webap', 'batch'])
         {
+            // コマンド組立
+            def ssh_cmd = [
+                ('ssh -i ' + env.session.ssh."${server}".identity),
+                ('-p '     + env.session.ssh."${server}".port),
+                (            env.session.ssh."${server}".user + '@' + env.session.ssh."${server}".host),
+                (cmd)
+            ].join(' ')
+
             // リソース取得シェル実行
-            sshCmd(server, 'ls /opt/app/lib')
+            def proc = ssh_cmd.execute()
+
+            // コマンド結果保存先設定
+            proc.consumeProcessOutput(stdout, stderror)
+
+            // コマンド結果出力が完了するまで待機
+            proc.waitForProcessOutput()
 
             // エラー出力が発生している場合は、例外を投げる
             assert stderror.size() == 0
