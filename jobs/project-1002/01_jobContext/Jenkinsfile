@@ -44,11 +44,11 @@ stage('WU起動数監視')
         //}
         try {
             Properties env = new Properties()
-            def config = ['path':'/opt/app/conf', 'file':'env.groovy']
+            def config = ['path':'/opt/app/conf', 'file':'env.properties']
             File propsFile = new File(config['path'] + "/" + config['file'])
             env.load(propsFile.newDataInputStream())
             println env.getProperty('porcupine')
-            println env.getProperty(env.session.ssh.server.identity)
+            //println env.getProperty(env.session.ssh.server.identity)
         }
         catch(Exception e) {
             println ' 読み込めてない。'
