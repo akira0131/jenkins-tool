@@ -1,0 +1,150 @@
+// Jenkinsfile
+
+@Library('jenkins-common-lib') _
+
+/**
+ * ジョブ設定反映ステージ
+ * ・ユーザからジョブ実行モードの入力を受け付ける。
+ * ・ジョブ設定モードが選択された場合は、ジョブの初期設定をロードする。
+ * ・ジョブ設定モードが選択された場合は、後続処理を行わない。
+ * ・ジョブ実行モードが選択された場合は、デフォルトのジョブ設定はロードされないため、設定は上書きされない。
+ * ・ユーザから一定時間応答がなかった場合は、デフォルト値（ジョブ実行モード）が設定される。
+ */
+
+stage('ジョブ設定反映')
+{
+    node('master') { timestamps
+    {
+        try
+        {
+            // 応答に制限時間を設定
+            timeout(time: 5, unit: 'SECONDS')
+            {
+                // ユーザから入力を受け付ける
+                userInput = input(
+                    message        : '''\
+                                     |実行モードを選択してください。
+                                     |（デフォルト：ジョブ実行モード）'''.stripMargin(),
+                    ok             : '実行する',
+                    parameters     : [
+                        choice(
+                            name   : '動作モード:',
+                            choices: 'ジョブ実行モード\nジョブ設定モード'
+                        )
+                    ]
+                )
+            }
+        }
+        catch(Exception e)
+        {
+            // デフォルト値を設定
+            userInput = 'ジョブ実行モード'
+        }
+
+        // 実行モード判定
+        if(userInput == 'ジョブ設定モード')
+        {
+            try
+            {
+                // ジョブ初期設定ロード
+                //loadJobConfig
+
+                printMsg('info', 'ジョブの初期設定ロード完了')
+                printMsg('info', '動作モードがジョブ設定モードのため、後続処理はキャンセルされます。')
+            }
+            catch(Exception e)
+            {
+                printMsg('error', 'ジョブの初期設定ロードに失敗しました。')
+                throw e
+            }
+        }
+        else
+        {
+            printMsg('info', '動作モードがジョブ実行モードのため、ジョブ設定処理をスキップします。')
+        }
+    }}
+}
+
+stage('WU起動数監視')
+{
+    node('master') { timestamps
+    {
+        // 開始メッセージ
+        printMsg('info', '-------------------------------------------------------')
+        printMsg('info', 'WU起動数監視 START')
+        printMsg('info', '-------------------------------------------------------')
+
+        // バッチ設定ロード
+        loadEnvConfig
+
+        //
+        parallel
+        (
+           'webap':
+           {
+                // WU起動数判定コマンド取得
+                sshCmd(server, 'ls /opt/app/lib')
+
+                // エラー出力が発生している場合は、例外を投げる
+                assert stderror.size() == 0
+
+                // WU起動数結果判定
+                switch(true)
+                {
+                    // 危険域
+                    case(stdout.contains(env.resource.monitor.wu.execute.faital.keyword)) as Boolean:
+
+                        // コマンド結果を標準出力
+                        printMsg('warning', stdout)
+
+                        // メール通知
+                        emailext(
+                            to        : '${ENV, var="debug_mail_address"}',
+                            subject   : '${DEFAULT_SUBJECT}ABORT',
+                            body      : '''<p>ジョブ走行中に予期せぬエラーが発生しました。</p>
+                                           <p>解析をお願いします。</p>''',
+                            attachLog : true,
+                            mimeType  : 'text/html'
+                        )
+
+                        // フラグを立てる
+                        boolean failed_flag = true
+
+                        break
+
+                    // 注意域
+                    case(stdout.contains(env.resource.monitor.wu.execute.warning.keyword)) as Boolean:
+
+                        // コマンド結果を標準出力
+                        printMsg('warning', stdout)
+
+                        // メール通知
+                        emailext(
+                            to        : '${ENV, var="debug_mail_address"}',
+                            subject   : '${DEFAULT_SUBJECT}ABORT',
+                            body      : '''<p>ジョブ走行中に予期せぬエラーが発生しました。</p>
+                                           <p>解析をお願いします。</p>''',
+                            attachLog : true,
+                            mimeType  : 'text/html'
+                        )
+
+                        // フラグを立てる
+                        boolean failed_flag = true
+
+                        break
+
+                    // 正常域
+                    default:
+
+                        // 標準出力に出力
+                        printMsg('info', stdout)
+                }
+            },
+
+           'batch':
+           {
+                println 'skip proc'
+           }
+       )
+    }}
+}
