@@ -36,9 +36,9 @@ stage('WU起動数監視')
         {
             // コマンド組立
             def ssh_cmd = [
-                ('ssh -i ' + env.session.ssh."${server}".identity),
-                ('-p '     + env.session.ssh."${server}".port),
-                (            env.session.ssh."${server}".user + '@' + env.session.ssh."${server}".host),
+                ('ssh -i ' + env.session.ssh.webap.identity),
+                ('-p '     + env.session.ssh.webap.port),
+                (            env.session.ssh.webap.user + '@' + env.session.ssh.webap.host),
                 (cmd)
             ].join(' ')
 
