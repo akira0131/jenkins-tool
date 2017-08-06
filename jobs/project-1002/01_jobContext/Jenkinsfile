@@ -35,7 +35,8 @@ stage('WU起動数監視')
         try {
             def env = new Properties()
             def config = ['path':'/opt/app/conf', 'file':'env.groovy']
-            new File(config['path'] + "/" + config['file']).withInputStream { stream -> props.load(stream) }
+            new File(config['path'] + "/" + config['file']).withInputStream { stream -> env.load(stream) }
+            println "env.session.ssh.server.identity=" + props["env.session.ssh.server.identity"]
         }
         catch(Exception e) {
             println ' 読み込めてない。'
