@@ -29,7 +29,9 @@ stage('WU起動数監視')
             def config = ['path':'/opt/app/conf', 'file':'env.groovy']
             def env = new ConfigSlurper().parse(new File(config['path'] + "/" + config['file']).toURL())
         }
-        catch(Exception e) {}
+        catch(Exception e) {
+            println ' 読み込めてない。'
+        }
 
         // AP設定ロードに失敗している場合は、例外を投げる
         //assert env.size() != 0
