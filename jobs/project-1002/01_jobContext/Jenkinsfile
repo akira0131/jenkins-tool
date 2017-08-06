@@ -32,6 +32,14 @@ stage('WU起動数監視')
         catch(Exception e) {
             println ' 読み込めてない。'
         }
+        try {
+            def env = new Properties()
+            def config = ['path':'/opt/app/conf', 'file':'env.groovy']
+            new File(config['path'] + "/" + config['file']).withInputStream { stream -> props.load(stream) }
+        }
+        catch(Exception e) {
+            println ' 読み込めてない。'
+        }
 
         // AP設定ロードに失敗している場合は、例外を投げる
         //assert env.size() != 0
