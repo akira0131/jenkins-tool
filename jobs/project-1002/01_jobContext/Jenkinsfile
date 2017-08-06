@@ -23,7 +23,8 @@ stage('WU起動数監視')
         // AP設定ロード
         loadEnvConfig
 
-        // 設定ロードに失敗している場合は、例外を投げる
+        // AP設定ロードに失敗している場合は、例外を投げる
+        println env.size()
         assert env.size() != 0
 
         // Webap,batchサーバのみ実施
