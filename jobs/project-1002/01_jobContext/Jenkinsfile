@@ -33,6 +33,7 @@ stage('WU起動数監視')
 
         // AP設定ロードに失敗している場合は、例外を投げる
         //assert env.size() != 0
+        println env.session.ssh.server.identity
         println env.resource.monitor.wu.execute.faital.keyword
 
         // Webap,batchサーバのみ実施
