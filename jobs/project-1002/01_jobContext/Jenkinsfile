@@ -23,12 +23,6 @@ stage('WU起動数監視')
         // AP設定ロード
         loadEnvConfig
 
-try {
-        def config = ['path':'/opt/app/conf', 'file':'env.groovy']
-        def job = new ConfigSlurper().parse(new File(config['path'] + "/" + config['file']).toURL())
-    } catch(Exception e) {}
-        println env.ssesion.ssh.webap.identity
-
         // Webap,batchサーバのみ実施
         for (server in ['webap', 'batch'])
         {
