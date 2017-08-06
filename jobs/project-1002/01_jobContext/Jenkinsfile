@@ -32,16 +32,30 @@ stage('WU起動数監視')
         //catch(Exception e) {
         //    println ' 読み込めてない。'
         //}
+        //try {
+        //    def env = new Properties()
+        //    def config = ['path':'/opt/app/conf', 'file':'env.groovy']
+        //    new File(config['path'] + "/" + config['file']).withInputStream { stream -> env.load(stream) }
+        //    println "session.ssh.server.identity=" + env["session.ssh.server.identity"]
+        //    println "session.ssh.server.identity=" + env.session.ssh.server.identity
+        //}
+        //catch(Exception e) {
+        //    println ' 読み込めてない。'
+        //}
         try {
-            def env = new Properties()
+            Properties env = new Properties()
             def config = ['path':'/opt/app/conf', 'file':'env.groovy']
-            new File(config['path'] + "/" + config['file']).withInputStream { stream -> env.load(stream) }
-            println "session.ssh.server.identity=" + env["session.ssh.server.identity"]
-            println "session.ssh.server.identity=" + env.session.ssh.server.identity
+            File propsFile = new File(config['path'] + "/" + config['file'])
+            env.load(propsFile.newDataInputStream())
+            println env.getProperty('porcupine')
+            println env.getProperty(env.session.ssh.server.identity)
         }
         catch(Exception e) {
             println ' 読み込めてない。'
         }
+
+
+
 
         // AP設定ロードに失敗している場合は、例外を投げる
         //assert env.size() != 0
