@@ -23,8 +23,8 @@ stage('WU起動数監視')
         // AP設定ロード
         try // nonserializable対策
         {
-            config = ['path':'/opt/app/conf', 'file':'env.groovy']
-            env = new ConfigSlurper().parse(new File(config['path'] + "/" + config['file']).toURL())
+            def config = ['path':'/opt/app/conf', 'file':'env.groovy']
+            def env = new ConfigSlurper().parse(new File(config['path'] + "/" + config['file']).toURL())
         }
         catch(Exception e) {}
 
