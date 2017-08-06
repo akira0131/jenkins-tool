@@ -29,11 +29,7 @@ stage('WU起動数監視')
         catch(Exception e) {}
 
         // AP設定ロードに失敗している場合は、例外を投げる
-        println 'envの中身チェック'
-        println env
-        println 'envの数チェック'
-        println env.size()
-        assert env.size() != 0
+        //assert env.size() != 0
 
         // Webap,batchサーバのみ実施
         for (server in ['webap', 'batch'])
