@@ -22,6 +22,7 @@ stage('WU起動数監視')
 
         // AP設定ロード
         loadEnvConfig
+        println env.ssesion.ssh.webap.identity
 
         // Webap,batchサーバのみ実施
         for (server in ['webap', 'batch'])
@@ -31,16 +32,16 @@ stage('WU起動数監視')
             sshCmd(server, 'ls /opt/app/lib')
 
             // エラー出力が発生している場合は、例外を投げる
-            assert result.stderror.size() == 0
+            assert result['stderror'].size() == 0
 
             // WU起動数結果判定
             switch(true)
             {
                 // 危険域
-                case(result.stdout.contains(env.resource.monitor.wu.execute.faital.keyword)) as Boolean:
+                case(result['stdout'].contains(env.resource.monitor.wu.execute.faital.keyword)) as Boolean:
 
                     // コマンド結果を標準出力
-                    printMsg('warning', result.stdout)
+                    printMsg('warning', result['stdout'])
 
                     // メール通知
                     try
@@ -71,10 +72,10 @@ stage('WU起動数監視')
                     break
 
                 // 注意域
-                case(result.stdout.contains(env.resource.monitor.wu.execute.warning.keyword)) as Boolean:
+                case(result['stdout'].contains(env.resource.monitor.wu.execute.warning.keyword)) as Boolean:
 
                     // コマンド結果を標準出力
-                    printMsg('warning', result.stdout)
+                    printMsg('warning', result['stdout'])
 
                     // メール通知
                     emailext(
@@ -95,7 +96,7 @@ stage('WU起動数監視')
                 default:
 
                     // 標準出力に出力
-                    printMsg('info', result.stdout)
+                    printMsg('info', result['stdout'])
             }
         }}
     }
