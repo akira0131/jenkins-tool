@@ -1,0 +1,133 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@2.11.1">
+  <actions>
+    <io.jenkins.blueocean.service.embedded.BlueOceanUrlAction plugin="blueocean-rest-impl@1.1.5">
+      <blueOceanUrlObject class="io.jenkins.blueocean.service.embedded.BlueOceanUrlObjectImpl">
+        <mappedUrl>blue/organizations/jenkins/Test</mappedUrl>
+      </blueOceanUrlObject>
+    </io.jenkins.blueocean.service.embedded.BlueOceanUrlAction>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction plugin="pipeline-model-definition@1.1.9">
+      <jobProperties/>
+      <triggers/>
+      <parameters/>
+    </org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
+  </actions>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+      <triggers/>
+    </org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+  </properties>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.38">
+    <script>stage(&apos;build&apos;)
+{
+    node(&apos;master&apos;)
+    {
+        echo &apos;Building..&apos;
+    }
+}
+
+stage(&apos;user_input&apos;)
+{
+    node(&apos;master&apos;)
+    {
+        try {
+                    // ユーザから入力を受け付ける
+                    timeout(time: 10, unit: &apos;SECONDS&apos;)
+                    {
+                        try
+                        {
+                            // ユーザ設定ロード
+                            userInput = input(
+                                message             : &apos;&apos;&apos;\
+                                                      |実行モードを選択してください。
+                                                      |（デフォルト：ジョブ実行モード）&apos;&apos;&apos;.stripMargin(),
+                                ok                  : &apos;実行する&apos;,
+                                parameters          : [
+                                    choice(
+                                        name        : &apos;動作モード:&apos;, 
+                                        choices     : &apos;ジョブ実行モード\nジョブ設定モード&apos;,
+                                        defaultValue: &apos;ジョブ実行モード&apos;
+                                    )
+                                ]
+                            )
+                        } catch(Exception e) {
+
+                            println userInput
+                            throw e
+                        }
+                    }
+                } catch(Exception e) {
+// デフォルト値を設定
+                    userInput = &apos;ジョブ実行モード&apos;
+                }
+
+        println userInput
+        
+        // 実行モード判定
+        if(userInput == &apos;ジョブ設定モード&apos;)
+        {
+            // ジョブ初期設定ロード
+            try {
+                def config = [&apos;path&apos;:&apos;/opt/app/conf&apos;, &apos;file&apos;:&apos;job.groovy&apos;]
+                def job = new ConfigSlurper().parse(new File(config[&apos;path&apos;] + &quot;/&quot; + config[&apos;file&apos;]).toURL())
+            } catch(Exception e) {}
+
+            // ジョブ設定反映
+            try
+            {
+                //
+                triggers
+                {
+                    //
+                    cron(&apos;* * * * *&apos;)
+                }
+
+                //
+                options
+                {
+                    // ログ保持日数
+                    buildDiscarder(logRoator(daysToKeepStr: &apos;30&apos;))
+                }
+                println &apos;ジョブの初期設定ロード完了&apos;
+                println &apos;動作モードがジョブ設定モードのため、後続処理はキャンセルされます。&apos;
+            }
+            catch(Exception e) {
+
+                println &apos;ジョブの初期設定ロードに失敗しました。&apos;
+            }
+        }
+        else
+        {
+            println &apos;動作モードがジョブ実行モードのため、ジョブ設定処理をスキップします。&apos;
+        }
+    }
+}
+
+stage(&apos;mail_test&apos;)
+{
+    node(&apos;master&apos;)
+    {
+        // 外部ファイルからジョブ設定ロード
+        try 
+        {
+            def config = [&apos;path&apos;:&apos;/opt/app/conf&apos;, &apos;file&apos;:&apos;env.groovy&apos;]
+            def env = new ConfigSlurper().parse(new File(config[&apos;path&apos;] + &quot;/&quot; + config[&apos;file&apos;]).toURL())
+        } catch(Exception e){}
+
+        emailext(
+            to        : &apos;${ENV, var=&quot;debug_mail_address&quot;}&apos;,
+            subject   : &apos;${DEFAULT_SUBJECT}ABORT&apos;,
+            body      : &apos;&apos;&apos;&lt;p&gt;ジョブ走行中に予期せぬエラーが発生しました。&lt;/p&gt;
+                          &lt;p&gt;解析をお願いします。&lt;/p&gt;&apos;&apos;&apos;,
+            attachLog : false,
+            mimeType  : &apos;text/html&apos;
+        )
+    }
+}</script>
+    <sandbox>false</sandbox>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>
+</flow-definition>
