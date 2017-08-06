@@ -42,17 +42,37 @@ stage('WU起動数監視')
         //catch(Exception e) {
         //    println ' 読み込めてない。'
         //}
+        //try {
+        //    Properties env = new Properties()
+        //    def config = ['path':'/opt/app/conf', 'file':'env.properties']
+        //    File propsFile = new File(config['path'] + "/" + config['file'])
+        //    env.load(propsFile.newDataInputStream())
+        //    println env.getProperty('porcupine')
+        //    //println env.getProperty(env.session.ssh.server.identity)
+        //}
+        //catch(Exception e) {
+        //    println ' 読み込めてない。'
+        //    throw e
+        //}
         try {
-            Properties env = new Properties()
+            def logger = LogManager.getLogManager().getLogger("")
             def config = ['path':'/opt/app/conf', 'file':'env.properties']
-            File propsFile = new File(config['path'] + "/" + config['file'])
-            env.load(propsFile.newDataInputStream())
-            println env.getProperty('porcupine')
-            //println env.getProperty(env.session.ssh.server.identity)
+            def propertiesFile = new File(config['path'] + "/" + config['file'])
+
+            if (propertiesFile.exists()) {
+                logger.info("Loading system properties from ${propertiesFile.absolutePath}")
+                propertiesFile.withReader { r ->
+
+                    def props = new Properties()
+                    props.load(r)
+                    props.each { key, value ->
+                        System.setProperty(key, value)
+                    }
+                }
+            }
         }
         catch(Exception e) {
             println ' 読み込めてない。'
-            throw e
         }
 
 
