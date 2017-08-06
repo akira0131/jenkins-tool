@@ -34,16 +34,8 @@ stage('WU起動数監視')
         // Webap,batchサーバのみ実施
         for (server in ['webap', 'batch'])
         {
-            // コマンド組立
-            def ssh_cmd = [
-                ('ssh -i ' + env.session.ssh.webap.identity),
-                ('-p '     + env.session.ssh.webap.port),
-                (            env.session.ssh.webap.user + '@' + env.session.ssh.webap.host),
-                (cmd)
-            ].join(' ')
-
             // リソース取得シェル実行
-            def proc = ssh_cmd.execute()
+            def proc = 'ssh -i /Users/akira_air/.ssh/id_rsa -p 22 redmine@127.0.0.1 ls /opt/app/lib'.execute()
 
             // コマンド結果保存先設定
             proc.consumeProcessOutput(stdout, stderror)
