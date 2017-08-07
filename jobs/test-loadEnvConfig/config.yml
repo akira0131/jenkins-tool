@@ -1,0 +1,9 @@
+# env.yml
+
+someProp: 値１
+someCategory:
+  prop: 値２
+  arrayProp:
+    - 配列値０
+    - 配列値１
+    - 配列値２

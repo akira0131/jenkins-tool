@@ -1,4 +1,4 @@
-// Jenkinsfile
+#!/usr/bin/groovy
 
 @Library('jenkins-common-lib') _
 
@@ -15,8 +15,7 @@ stage('WU起動数監視')
     node('master') { timestamps
     {
         // 宣言・初期化
-        def stdout = new StringBuffer(), stderror = new StringBuffer()
-        def env = new Sample(), sendMail = [:]
+        def stdout = new StringBuffer(), stderror = new StringBuffer(), env = [:]
         boolean failed_flag = false
 
         // 開始メッセージ
