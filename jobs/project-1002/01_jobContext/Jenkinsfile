@@ -16,7 +16,7 @@ stage('WU起動数監視')
     {
         // 宣言・初期化
         def stdout = new StringBuffer(), stderror = new StringBuffer()
-        def env = new Env(), sendMail = [:]
+        def env = new Sample(), sendMail = [:]
         boolean failed_flag = false
 
         // 開始メッセージ
