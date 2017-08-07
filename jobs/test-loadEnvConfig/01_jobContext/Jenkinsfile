@@ -6,7 +6,7 @@ stage('test-loadEnvConfig')
 {
     node('master') { timestamps
     {
-        def config = readYaml file: 'config.yml']
+        def config = readYaml file: 'config.yml'
 
         echo "config.someProp ＝ ${config.someProp}"
         echo "config.someCategory.prop ＝ ${config.someCategory.prop}"
