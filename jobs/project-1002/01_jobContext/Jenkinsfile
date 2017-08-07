@@ -24,7 +24,7 @@ stage('WU起動数監視')
         printMsg('info', '-------------------------------------------------------')
 
         // AP設定ロード
-        def env = loadEnvConfig(env)
+        def env = loadEnvConfig()
 
         println 'env: ' + env.size()
 
