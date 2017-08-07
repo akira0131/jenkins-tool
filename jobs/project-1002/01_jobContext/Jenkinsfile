@@ -15,7 +15,6 @@ stage('WU起動数監視')
     node('master') { timestamps
     {
         // 宣言・初期化
-        def stdout = new StringBuffer(), stderror = new StringBuffer()
         boolean failed_flag = false
 
         // 開始メッセージ
