@@ -35,7 +35,7 @@ stage('WU起動数監視')
             def result = sshCmd(env, server, 'ls /opt/app/lib')
 
             // エラーが発生している場合は、例外を投げる
-            assert result['stderror'].size() != 0
+            assert result['stderror'] != ''
 
             // WU起動数結果判定
             switch(true)
