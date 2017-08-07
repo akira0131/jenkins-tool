@@ -27,6 +27,8 @@ stage('WU起動数監視')
         // AP設定ロード
         loadEnvConfig(env)
 
+        println 'env: ' + env.size()
+
         // AP設定ロードに失敗している場合は、例外を投げる
         assert env.size() == 0
 
@@ -34,7 +36,7 @@ stage('WU起動数監視')
         for (server in ['webap', 'batch'])
         {
             // リソース取得シェル実行
-            sshCmd(server, 'ls /opt/app/lib', stdout, stderror)
+            sshCmd(server, 'ls /opt/app/lib', stdout, stderror, env)
 
             // エラー出力が発生している場合は、例外を投げる
             assert stderror.size() == 0
