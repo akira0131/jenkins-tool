@@ -29,7 +29,7 @@ stage('WU起動数監視')
         println 'env: ' + env.size()
 
         // AP設定ロードに失敗している場合は、例外を投げる
-        assert env.size() == 0
+        assert env.size() != 0
 
         // Webap,batchサーバのみ実施
         for (server in ['webap', 'batch'])
@@ -38,7 +38,7 @@ stage('WU起動数監視')
             def result = sshCmd(env, server, 'ls /opt/app/lib')
 
             // エラー出力が発生している場合は、例外を投げる
-            assert result.stderror.size() == 0
+            assert result.stderror.size() != 0
 
             // WU起動数結果判定
             switch(true)
