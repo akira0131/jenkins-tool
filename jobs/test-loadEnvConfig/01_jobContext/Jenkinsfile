@@ -6,9 +6,9 @@ stage('test-loadEnvConfig')
 {
     node('master') { timestamps
     {
-        def config = ['path':'/opt/app/conf', 'file':'config.yml']
-        def env = readYaml(
-            file: config['path'] + "/" + config['file']
+        def config_file = ['path':'/opt/app/conf', 'file':'config.yml']
+        def config = readYaml(
+            file: config_file['path'] + "/" + config_file['file']
         )
 
         echo "config.someProp ＝ ${config.someProp}"
