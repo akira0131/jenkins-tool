@@ -10,13 +10,14 @@
  * ・
  * ・
  */
-
 stage('WU起動数監視')
 {
     node('master') { timestamps
     {
-        // 宣言
+        // 宣言・初期化
         def stdout = new StringBuffer(), stderror = new StringBuffer()
+        def env = [:], sendMail = [:]
+        boolean failed_flag = false
 
         // 開始メッセージ
         printMsg('info', '-------------------------------------------------------')
@@ -24,76 +25,16 @@ stage('WU起動数監視')
         printMsg('info', '-------------------------------------------------------')
 
         // AP設定ロード
-        //try // nonserializable対策
-        //{
-        //config = ['path':'/opt/app/conf', 'file':'env.groovy']
-        //env = new ConfigSlurper().parse(new File(config['path'] + "/" + config['file']).toURL())
-        //}
-        //catch(Exception e) {
-        //    println ' 読み込めてない。'
-        //}
-        //try {
-        //    def env = new Properties()
-        //    def config = ['path':'/opt/app/conf', 'file':'env.groovy']
-        //    new File(config['path'] + "/" + config['file']).withInputStream { stream -> env.load(stream) }
-        //    println "session.ssh.server.identity=" + env["session.ssh.server.identity"]
-        //    println "session.ssh.server.identity=" + env.session.ssh.server.identity
-        //}
-        //catch(Exception e) {
-        //    println ' 読み込めてない。'
-        //}
-        //try {
-        //    Properties env = new Properties()
-        //    def config = ['path':'/opt/app/conf', 'file':'env.properties']
-        //    File propsFile = new File(config['path'] + "/" + config['file'])
-        //    env.load(propsFile.newDataInputStream())
-        //    println env.getProperty('porcupine')
-        //    //println env.getProperty(env.session.ssh.server.identity)
-        //}
-        //catch(Exception e) {
-        //    println ' 読み込めてない。'
-        //    throw e
-        //}
-        try {
-            def logger = LogManager.getLogManager().getLogger("")
-            def config = ['path':'/opt/app/conf', 'file':'env.properties']
-            def propertiesFile = new File(config['path'] + "/" + config['file'])
-
-            if (propertiesFile.exists()) {
-                logger.info("Loading system properties from ${propertiesFile.absolutePath}")
-                propertiesFile.withReader { r ->
-
-                    def props = new Properties()
-                    props.load(r)
-                    props.each { key, value ->
-                        System.setProperty(key, value)
-                    }
-                }
-            }
-        }
-        catch(Exception e) {
-            println ' 読み込めてない。'
-        }
-
-
-
+        loadEnvConfig(env)
 
         // AP設定ロードに失敗している場合は、例外を投げる
-        //assert env.size() != 0
-        println env.session.ssh.server.identity
-        println env.resource.monitor.wu.execute.faital.keyword
+        assert env.size() == 0
 
         // Webap,batchサーバのみ実施
         for (server in ['webap', 'batch'])
         {
             // リソース取得シェル実行
-            def proc = 'ssh -i /Users/akira_air/.ssh/id_rsa -p 22 redmine@127.0.0.1 ls /opt/app/lib'.execute()
-
-            // コマンド結果保存先設定
-            proc.consumeProcessOutput(stdout, stderror)
-
-            // コマンド結果出力が完了するまで待機
-            proc.waitForProcessOutput()
+            sshCmd(server, 'ls /opt/app/lib', stdout, stderror)
 
             // エラー出力が発生している場合は、例外を投げる
             assert stderror.size() == 0
@@ -110,7 +51,7 @@ stage('WU起動数監視')
                     // メール通知
                     try
                     {
-                        def sendMail = emailext(
+                        sendMail = emailext(
                             to        : '${ENV, var="debug_mail_address"}',
                             subject   : '${DEFAULT_SUBJECT}危険域',
                             body      : '''<p>ジョブ走行中に予期せぬエラーが発生しました。</p>
@@ -131,7 +72,7 @@ stage('WU起動数監視')
                     }
 
                     // フラグを立てる
-                    boolean failed_flag = true
+                    failed_flag = true
 
                     break
 
@@ -142,26 +83,65 @@ stage('WU起動数監視')
                     printMsg('warning', stdout)
 
                     // メール通知
-                    emailext(
-                        to        : '${ENV, var="debug_mail_address"}',
-                        subject   : '${DEFAULT_SUBJECT}ABORT',
-                        body      : '''<p>ジョブ走行中に予期せぬエラーが発生しました。</p>
-                                       <p>解析をお願いします。</p>''',
-                        attachLog : true,
-                        mimeType  : 'text/html'
-                    )
+                    try
+                    {
+                        sendMail = emailext(
+                            to        : '${ENV, var="debug_mail_address"}',
+                            subject   : '${DEFAULT_SUBJECT}危険域',
+                            body      : '''<p>ジョブ走行中に予期せぬエラーが発生しました。</p>
+                                           <p>解析をお願いします。</p>''',
+                            attachLog : true,
+                            mimeType  : 'text/html'
+
+                        ) { result ->
+
+                            printMsg('info', 'メール通知に成功しました。')
+                            printMsg('info', '送信先アドレス: ' + debug_mail_address)
+                        }
+                    }
+                    catch(Exception e) {
+
+                        printMsg('error', 'メール通知に失敗しました。')
+                        throw e
+                    }
 
                     // フラグを立てる
-                    boolean failed_flag = true
+                    failed_flag = true
 
                     break
 
                 // 正常域
                 default:
 
-                    // 標準出力に出力
+                    // コマンド結果を標準出力
                     printMsg('info', stdout)
             }
-        }}
-    }
+        }
+
+        // 終了メッセージ
+        printMsg('info', '-------------------------------------------------------')
+        printMsg('info', 'WU起動数監視ステージ FINISH')
+        printMsg('info', '-------------------------------------------------------')
+    }}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
