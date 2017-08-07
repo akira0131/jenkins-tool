@@ -15,7 +15,7 @@ stage('WU起動数監視')
     node('master') { timestamps
     {
         // 宣言・初期化
-        def stdout = new StringBuffer(), stderror = new StringBuffer(), env = [:]
+        def stdout = new StringBuffer(), stderror = new StringBuffer()
         boolean failed_flag = false
 
         // 開始メッセージ
@@ -24,7 +24,7 @@ stage('WU起動数監視')
         printMsg('info', '-------------------------------------------------------')
 
         // AP設定ロード
-        loadEnvConfig(env)
+        def env = loadEnvConfig(env)
 
         println 'env: ' + env.size()
 
@@ -35,19 +35,19 @@ stage('WU起動数監視')
         for (server in ['webap', 'batch'])
         {
             // リソース取得シェル実行
-            sshCmd(server, 'ls /opt/app/lib', stdout, stderror, env)
+            def result = sshCmd(env, server, 'ls /opt/app/lib')
 
             // エラー出力が発生している場合は、例外を投げる
-            assert stderror.size() == 0
+            assert result.stderror.size() == 0
 
             // WU起動数結果判定
             switch(true)
             {
                 // 危険域
-                case(stdout.contains(env.resource.monitor.wu.execute.faital.keyword)) as Boolean:
+                case(result.stdout.contains(env.resource.monitor.wu.execute.faital.keyword)) as Boolean:
 
                     // コマンド結果を標準出力
-                    printMsg('warning', stdout)
+                    printMsg('warning', result.stdout)
 
                     // メール通知
                     try
@@ -60,7 +60,7 @@ stage('WU起動数監視')
                             attachLog : true,
                             mimeType  : 'text/html'
 
-                        ) { result ->
+                        ) { console ->
 
                             printMsg('info', 'メール通知に成功しました。')
                             printMsg('info', '送信先アドレス: ' + debug_mail_address)
@@ -78,10 +78,10 @@ stage('WU起動数監視')
                     break
 
                 // 注意域
-                case(stdout.contains(env.resource.monitor.wu.execute.warning.keyword)) as Boolean:
+                case(result.stdout.contains(env.resource.monitor.wu.execute.warning.keyword)) as Boolean:
 
                     // コマンド結果を標準出力
-                    printMsg('warning', stdout)
+                    printMsg('warning', result.stdout)
 
                     // メール通知
                     try
@@ -94,7 +94,7 @@ stage('WU起動数監視')
                             attachLog : true,
                             mimeType  : 'text/html'
 
-                        ) { result ->
+                        ) { console ->
 
                             printMsg('info', 'メール通知に成功しました。')
                             printMsg('info', '送信先アドレス: ' + debug_mail_address)
@@ -115,7 +115,7 @@ stage('WU起動数監視')
                 default:
 
                     // コマンド結果を標準出力
-                    printMsg('info', stdout)
+                    printMsg('info', result.stdout)
             }
         }
 
