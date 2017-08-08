@@ -54,11 +54,10 @@ stage('WU起動数監視')
                             attachLog : true,
                             mimeType  : 'text/html'
 
-                        ) { console ->
+                        )
 
-                            printMsg('info', 'メール通知に成功しました。')
-                            printMsg('info', '送信先アドレス: ' + env.debug.mail.address)
-                        }
+                        printMsg('info', 'メール通知に成功しました。')
+                        printMsg('info', '送信先アドレス: ' + env.debug.mail.address)
                     }
                     catch(Exception e) {
 
