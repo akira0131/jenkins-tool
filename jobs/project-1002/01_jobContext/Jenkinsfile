@@ -26,7 +26,7 @@ stage('WU起動数監視')
         def env = loadEnvConfig()
 
         // Webap,batchサーバのみ実施
-        for (server in ['webap', 'batch']) [server]: {
+        for (server in ['webap', 'batch'])
         {
             // リソース取得シェル実行
             def result = sshCmd(env, server, 'ls /opt/app/lib')
@@ -111,7 +111,7 @@ stage('WU起動数監視')
                     // コマンド結果を標準出力
                     printMsg('info', result['stdout'])
             }
-        }}
+        }
 
         // 終了メッセージ
         printMsg('info', '-------------------------------------------------------')
