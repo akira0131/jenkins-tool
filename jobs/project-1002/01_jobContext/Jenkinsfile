@@ -47,13 +47,12 @@ stage('WU起動数監視')
                     try
                     {
                         emailext(
-                            to        : env.debug.mail.address,
-                            subject   : '【JENKINS】WU起動数が危険域に達しています',
+                            to        : '${ENV, var="debug_mail_address"}',
+                            subject   : '${DEFAULT_SUBJECT}ABORT',
                             body      : '''<p>ジョブ走行中に予期せぬエラーが発生しました。</p>
-                                           <p>解析をお願いします。</p>''',
-                            attachLog : true,
+                                            <p>解析をお願いします。</p>''',
+                            attachLog : false,
                             mimeType  : 'text/html'
-
                         )
 
                         printMsg('info', 'メール通知に成功しました。')
