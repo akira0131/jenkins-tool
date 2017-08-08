@@ -47,7 +47,7 @@ stage('WU起動数監視')
                     try
                     {
                         sendMail = emailext(
-                            to        : debug.mail.address,
+                            to        : env.debug.mail.address,
                             subject   : '${DEFAULT_SUBJECT}危険域',
                             body      : '''<p>ジョブ走行中に予期せぬエラーが発生しました。</p>
                                            <p>解析をお願いします。</p>''',
@@ -57,7 +57,7 @@ stage('WU起動数監視')
                         ) { console ->
 
                             printMsg('info', 'メール通知に成功しました。')
-                            printMsg('info', '送信先アドレス: ' + debug.mail.address)
+                            printMsg('info', '送信先アドレス: ' + env.debug.mail.address)
                         }
                     }
                     catch(Exception e) {
@@ -81,7 +81,7 @@ stage('WU起動数監視')
                     try
                     {
                         sendMail = emailext(
-                            to        : debug.mail.address,
+                            to        : env.debug.mail.address,
                             subject   : '${DEFAULT_SUBJECT}危険域',
                             body      : '''<p>ジョブ走行中に予期せぬエラーが発生しました。</p>
                                            <p>解析をお願いします。</p>''',
@@ -91,7 +91,7 @@ stage('WU起動数監視')
                         ) { console ->
 
                             printMsg('info', 'メール通知に成功しました。')
-                            printMsg('info', '送信先アドレス: ' + debug.mail.address)
+                            printMsg('info', '送信先アドレス: ' + env.debug.mail.address)
                         }
                     }
                     catch(Exception e) {
