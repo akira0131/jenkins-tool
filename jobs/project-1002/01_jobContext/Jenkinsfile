@@ -25,17 +25,14 @@ stage('WU起動数監視')
         // AP設定ロード
         def env = loadEnvConfig()
 
-        // AP設定ロードに失敗している場合は、例外を投げる
-        //assert env.size() != 0
-
         // Webap,batchサーバのみ実施
-        for (server in ['webap', 'batch'])
+        for (server in ['webap', 'batch']) [server] = {
         {
             // リソース取得シェル実行
             def result = sshCmd(env, server, 'ls /opt/app/lib')
 
             // エラーが発生している場合は、例外を投げる
-            assert result['stderror'] != ''
+            assert result['stderror'] != null
 
             // WU起動数結果判定
             switch(true)
@@ -50,7 +47,7 @@ stage('WU起動数監視')
                     try
                     {
                         sendMail = emailext(
-                            to        : '${ENV, var="debug_mail_address"}',
+                            to        : debug.mail.address,
                             subject   : '${DEFAULT_SUBJECT}危険域',
                             body      : '''<p>ジョブ走行中に予期せぬエラーが発生しました。</p>
                                            <p>解析をお願いします。</p>''',
@@ -60,7 +57,7 @@ stage('WU起動数監視')
                         ) { console ->
 
                             printMsg('info', 'メール通知に成功しました。')
-                            printMsg('info', '送信先アドレス: ' + debug_mail_address)
+                            printMsg('info', '送信先アドレス: ' + debug.mail.address)
                         }
                     }
                     catch(Exception e) {
@@ -84,7 +81,7 @@ stage('WU起動数監視')
                     try
                     {
                         sendMail = emailext(
-                            to        : '${ENV, var="debug_mail_address"}',
+                            to        : debug.mail.address,
                             subject   : '${DEFAULT_SUBJECT}危険域',
                             body      : '''<p>ジョブ走行中に予期せぬエラーが発生しました。</p>
                                            <p>解析をお願いします。</p>''',
@@ -94,7 +91,7 @@ stage('WU起動数監視')
                         ) { console ->
 
                             printMsg('info', 'メール通知に成功しました。')
-                            printMsg('info', '送信先アドレス: ' + debug_mail_address)
+                            printMsg('info', '送信先アドレス: ' + debug.mail.address)
                         }
                     }
                     catch(Exception e) {
@@ -114,7 +111,7 @@ stage('WU起動数監視')
                     // コマンド結果を標準出力
                     printMsg('info', result['stdout'])
             }
-        }
+        }}
 
         // 終了メッセージ
         printMsg('info', '-------------------------------------------------------')
