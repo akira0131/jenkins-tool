@@ -48,7 +48,7 @@ stage('WU起動数監視')
                     {
                         sendMail = emailext(
                             to        : env.debug.mail.address,
-                            subject   : '${DEFAULT_SUBJECT}危険域',
+                            subject   : DEFAULT_SUBJECT + '危険域',
                             body      : '''<p>ジョブ走行中に予期せぬエラーが発生しました。</p>
                                            <p>解析をお願いします。</p>''',
                             attachLog : true,
@@ -82,7 +82,7 @@ stage('WU起動数監視')
                     {
                         sendMail = emailext(
                             to        : env.debug.mail.address,
-                            subject   : '${DEFAULT_SUBJECT}危険域',
+                            subject   : DEFAULT_SUBJECT + '危険域',
                             body      : '''<p>ジョブ走行中に予期せぬエラーが発生しました。</p>
                                            <p>解析をお願いします。</p>''',
                             attachLog : true,
