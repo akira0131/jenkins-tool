@@ -46,7 +46,7 @@ stage('WU起動数監視')
                     // メール通知
                     try
                     {
-                        sendMail = emailext(
+                        emailext(
                             to        : env.debug.mail.address,
                             subject   : '【JENKINS】WU起動数が危険域に達しています',
                             body      : '''<p>ジョブ走行中に予期せぬエラーが発生しました。</p>
@@ -80,7 +80,7 @@ stage('WU起動数監視')
                     // メール通知
                     try
                     {
-                        sendMail = emailext(
+                        emailext(
                             to        : env.debug.mail.address,
                             subject   : '【JENKINS】WU起動数が注意域に達しています',
                             body      : '''<p>ジョブ走行中に予期せぬエラーが発生しました。</p>
