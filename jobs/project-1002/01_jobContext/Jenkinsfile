@@ -31,8 +31,8 @@ stage('WU起動数監視')
             // リソース取得シェル実行
             def result = sshCmd(env, server, 'ls /opt/app/lib')
 
-            // エラーが発生している場合は、例外を投げる
-            assert result['stderror'] != null
+            // 標準エラー出力が返却されている場合は、例外を投げる
+            assert result['stderror'] == null
 
             // WU起動数結果判定
             switch(true)
