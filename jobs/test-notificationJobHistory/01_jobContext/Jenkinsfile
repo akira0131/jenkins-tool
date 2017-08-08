@@ -7,7 +7,8 @@ stage('test-notificationJobHistory') { timestamps
     node('master')
     {
         // ジョブステータスを追加
-        manager.build.setDisplayName('#' + manager.build.number + " " + currentBuild.result)
+        //manager.build.setDisplayName('#' + manager.build.number + " " + currentBuild.result)
+        manager.build.setDisplayName('#' + manager.build.number + " " + 'SCUSESS')
 
         // 終了時間を追加
         end_time = new Date().dateTimeString
@@ -15,6 +16,6 @@ stage('test-notificationJobHistory') { timestamps
         manager.createSummary("gear2.gif").appendText("<h2>Undeployed: $end_time</h2>", false, false, false, "grey")
 
         // 成果物の保存
-        manager.build.keepLog(true)
+        //manager.build.keepLog(true)
     }
 }}
