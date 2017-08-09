@@ -101,7 +101,7 @@
                 }
 
                 // 判定結果を変数化
-                def result = ["${server}": 'faital']
+                def judgeResult = ["${server}": 'faital']
 
                 break
 
@@ -133,7 +133,7 @@
                 }
 
                 // 判定結果を変数化
-                def result = ["${server}": 'warning']
+                def judgeResult = ["${server}": 'warning']
 
                 break
 
@@ -144,7 +144,7 @@
                 printMsg('info', result['stdout'])
 
                 // 判定結果を変数化
-                def result = ["${server}": 'nomalend']
+                def judgeResult = ["${server}": 'nomalend']
         }
 
         // 終了メッセージ
@@ -179,6 +179,6 @@
         }
 
         // WU起動数判定結果をDBにインサート
-        writeResultFile(result, 'resource_monitor_wu_execute_' + server)
+        writeResultFile(judgeResult, 'resource_monitor_wu_execute_' + server)
     }
 }}
