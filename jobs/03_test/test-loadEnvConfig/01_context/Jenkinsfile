@@ -1,0 +1,16 @@
+#!groovy
+
+@Library('jenkins-common-lib') _
+
+stage('test-loadEnvConfig') { timestamps
+{
+    node('master')
+    {
+        def env = loadEnvConfig()
+
+        println 'env.mail.address.debug:' + env.mail.address.debug
+        println 'env.setting.ssh.timeoutSec: ' + env.settingssh.timeoutSec
+        println 'env.session.webap.identity: ' + env.session.webap.identity
+        println 'env.resource.monitor.wu.execute.faital.keyword: ' + env.resource.monitor.wu.execute.faital.keyword
+    }
+}}

@@ -47,7 +47,7 @@ stage('WU起動数監視')
                     try
                     {
                         emailext(
-                            to        : '${ENV, var="debug_mail_address"}',
+                            to        : env.debug.mail.address,
                             subject   : '${DEFAULT_SUBJECT}ABORT',
                             body      : '''<p>ジョブ走行中に予期せぬエラーが発生しました。</p>
                                             <p>解析をお願いします。</p>''',
@@ -79,7 +79,7 @@ stage('WU起動数監視')
                     try
                     {
                         emailext(
-                            to        : '${ENV, var="debug_mail_address"}',
+                            to        : env.debug.mail.address,
                             subject   : '${DEFAULT_SUBJECT}ABORT',
                             body      : '''<p>ジョブ走行中に予期せぬエラーが発生しました。</p>
                                             <p>解析をお願いします。</p>''',

@@ -6,7 +6,7 @@ stage('test-notificationJobHistory') { timestamps
 {
     node('master')
     {
-        // ジョブステータスを追加
+        // 通知タイトル
         //manager.build.setDisplayName('#' + manager.build.number + " " + currentBuild.result)
         manager.build.setDisplayName('#' + manager.build.number + " " + 'SCUSESS')
 
