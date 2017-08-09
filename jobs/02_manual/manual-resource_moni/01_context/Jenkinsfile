@@ -144,9 +144,7 @@
                 // 判定結果を変数化
                 result.put('wu_execute', 'nomalend')
         }
-println result['wu_execute']
-def result_wu_execute = result['wu_execute']
-println result_wu_execute
+
         // 終了メッセージ
         printMsg('info', '-------------------------------------------------------')
         printMsg('info', 'WU起動数判定ステージ FINISH')
@@ -162,9 +160,8 @@ println result_wu_execute
      */
     stage('後処理')
     {
-        println result_wu_execute
         // WU起動数判定結果により、ジョブ終了ステータスを決定
-        switch(result_wu_execute)
+        switch(result['wu_execute'])
         {
             case 'faital':
 
@@ -180,6 +177,6 @@ println result_wu_execute
         }
 
         // WU起動数判定結果をDBにインサート
-        writeResultFile(result_wu_execute, 'resource_monitor_wu_execute_' + server)
+        writeResultFile(result['wu_execute'], 'resource_monitor_wu_execute_' + server)
     }
 }}
