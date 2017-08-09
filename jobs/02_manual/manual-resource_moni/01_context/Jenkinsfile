@@ -32,7 +32,7 @@
                         parameters     : [
                             choice(
                                 name   : 'リソース取得先サーバ名:',
-                                choices: 'webapサーバ\nバッチサーバ'
+                                choices: 'webapサーバ' + System.properties['line.separator'] + 'バッチサーバ'
                             )
                         ]
                     )
