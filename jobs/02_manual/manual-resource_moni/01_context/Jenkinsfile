@@ -1,138 +1,184 @@
-#!/usr/bin/groovy
+#!groovy
 
 @Library('jenkins-common-lib') _
 
-/**
- * 　WU起動数監視ステージ
- * ・
- * ・
- * ・
- * ・
- * ・
- */
-stage('WU起動数監視')
+ node('master') { timestamps
 {
-    node('master') { timestamps
+   /** ジョブパラメータ取得ステージ
+     * ・
+     * ・
+     * ・
+     * ・
+     * ・
+     */
+    if(server == null)
     {
-        // 宣言・初期化
-        boolean failed_flag = false
+        stage('ジョブパラメータ取得')
+        {
+            try
+            {
+                // 応答に制限時間を設定
+                timeout(time: 10, unit: 'SECONDS')
+                {
+                    // ユーザから入力を受け付ける
+                    userInput = input(
+                        message        :  '''\
+                                     |リソース取得先サーバを選択してください。
+                                     |（応答時間：10秒）'''.stripMargin(),
+                        ok             : '選択する',
+                        parameters     : [
+                            choice(
+                                name   : 'リソース取得先サーバ名:',
+                                choices: 'Web/apサーバ\nバッチサーバ'
+                            )
+                        ]
+                    )
+                }
 
+                // 入力されたデータを変数化
+                def server = userInput
+            }
+            catch(Exception e)
+            {
+                // 応答時間を過ぎた場合は、例外を投げる
+                printMsg('error', '応答時間内にリソース取得先サーバを選択してください。')
+                throw e
+            }
+        }
+    }
+
+   /** WU起動数判定ステージ
+     * ・
+     * ・
+     * ・
+     * ・
+     * ・
+     */
+    stage('WU起動数判定[' + server + ']')
+    {
         // 開始メッセージ
         printMsg('info', '-------------------------------------------------------')
-        printMsg('info', 'WU起動数監視ステージ START')
+        printMsg('info', 'WU起動数判定ステージ START')
         printMsg('info', '-------------------------------------------------------')
 
         // AP設定ロード
         def env = loadEnvConfig()
 
-        // Webap,batchサーバのみ実施
-        for (server in ['webap', 'batch'])
+        // リソース取得シェル実行
+        def result = sshCmd(env, server, 'ls /opt/app/lib')
+
+        // 標準エラー出力が返却されている場合は、例外を投げる
+        assert result['stderror'] == null
+
+        // WU起動数結果判定
+        switch(true)
         {
-            // リソース取得シェル実行
-            def result = sshCmd(env, server, 'ls /opt/app/lib')
+            // 危険域
+            case(result['stdout'].contains(env.resource.monitor.wu.execute.faital.keyword)) as Boolean:
 
-            // 標準エラー出力が返却されている場合は、例外を投げる
-            assert result['stderror'] == null
+                // コマンド結果を標準出力
+                printMsg('warning', result['stdout'])
 
-            // WU起動数結果判定
-            switch(true)
-            {
-                // 危険域
-                case(result['stdout'].contains(env.resource.monitor.wu.execute.faital.keyword)) as Boolean:
+                // メール通知
+                try
+                {
+                    emailext(
+                        to        : env.mail.address.debug,
+                        subject   : '${DEFAULT_SUBJECT}ABORT',
+                        body      : '''<p>ジョブ走行中に予期せぬエラーが発生しました。</p>
+                                        <p>解析をお願いします。</p>''',
+                        attachLog : false,
+                        mimeType  : 'text/html'
+                    )
 
-                    // コマンド結果を標準出力
-                    printMsg('warning', result['stdout'])
+                    printMsg('info', 'メール通知に成功しました。')
+                    printMsg('info', '送信先アドレス: ' + env.mail.address.debug)
+                }
+                catch(Exception e) {
 
-                    // メール通知
-                    try
-                    {
-                        emailext(
-                            to        : env.debug.mail.address,
-                            subject   : '${DEFAULT_SUBJECT}ABORT',
-                            body      : '''<p>ジョブ走行中に予期せぬエラーが発生しました。</p>
-                                            <p>解析をお願いします。</p>''',
-                            attachLog : false,
-                            mimeType  : 'text/html'
-                        )
+                    printMsg('error', 'メール通知に失敗しました。')
+                    throw e
+                }
 
-                        printMsg('info', 'メール通知に成功しました。')
-                        printMsg('info', '送信先アドレス: ' + env.debug.mail.address)
-                    }
-                    catch(Exception e) {
+                // 判定結果を変数化
+                def result = ["${server}": 'faital']
 
-                        printMsg('error', 'メール通知に失敗しました。')
-                        throw e
-                    }
+                break
 
-                    // フラグを立てる
-                    failed_flag = true
+            // 注意域
+            case(result['stdout'].contains(env.resource.monitor.wu.execute.warning.keyword)) as Boolean:
 
-                    break
+                // コマンド結果を標準出力
+                printMsg('warning', result['stdout'])
 
-                // 注意域
-                case(result['stdout'].contains(env.resource.monitor.wu.execute.warning.keyword)) as Boolean:
+                // メール通知
+                try
+                {
+                    emailext(
+                        to        : env.mail.address.debug,
+                        subject   : '${DEFAULT_SUBJECT}ABORT',
+                        body      : '''<p>ジョブ走行中に予期せぬエラーが発生しました。</p>
+                                        <p>解析をお願いします。</p>''',
+                        attachLog : false,
+                        mimeType  : 'text/html'
+                    )
 
-                    // コマンド結果を標準出力
-                    printMsg('warning', result['stdout'])
+                    printMsg('info', 'メール通知に成功しました。')
+                    printMsg('info', '送信先アドレス: ' + env.mail.address.debug)
+                }
+                catch(Exception e) {
 
-                    // メール通知
-                    try
-                    {
-                        emailext(
-                            to        : env.debug.mail.address,
-                            subject   : '${DEFAULT_SUBJECT}ABORT',
-                            body      : '''<p>ジョブ走行中に予期せぬエラーが発生しました。</p>
-                                            <p>解析をお願いします。</p>''',
-                            attachLog : false,
-                            mimeType  : 'text/html'
-                        )
+                    printMsg('error', 'メール通知に失敗しました。')
+                    throw e
+                }
 
-                        printMsg('info', 'メール通知に成功しました。')
-                        printMsg('info', '送信先アドレス: ' + env.debug.mail.address)
-                    }
-                    catch(Exception e) {
+                // 判定結果を変数化
+                def result = ["${server}": 'warning']
 
-                        printMsg('error', 'メール通知に失敗しました。')
-                        throw e
-                    }
+                break
 
-                    // フラグを立てる
-                    failed_flag = true
+            // 正常域
+            default:
 
-                    break
+                // コマンド結果を標準出力
+                printMsg('info', result['stdout'])
 
-                // 正常域
-                default:
-
-                    // コマンド結果を標準出力
-                    printMsg('info', result['stdout'])
-            }
+                // 判定結果を変数化
+                def result = ["${server}": 'nomalend']
         }
 
         // 終了メッセージ
         printMsg('info', '-------------------------------------------------------')
-        printMsg('info', 'WU起動数監視ステージ FINISH')
+        printMsg('info', 'WU起動数判定ステージ FINISH')
         printMsg('info', '-------------------------------------------------------')
-    }}
-}
+    }
 
+   /** WU起動数判定ステージ
+     * ・
+     * ・
+     * ・
+     * ・
+     * ・
+     */
+    stage('後処理')
+    {
+        // WU起動数判定結果により、ジョブ終了ステータスを決定
+        switch(result["${server}"])
+        {
+            case 'faital':
 
+                currentBuild.result = 'FAILURE'
 
+            case 'warning':
 
+                currentBuild.result = 'FAILURE'
 
+            case 'nomalend':
 
+                currentBuild.result = 'SUCCESS'
+        }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        // WU起動数判定結果をDBにインサート
+        writeResultFile(result, 'resource_monitor')
+    }
+}}
