@@ -25,6 +25,7 @@ node('master') { timestamps
         {
             ff.delete()
         }
+    }
 
     /**  UT試験
      *  期待する動作：引数に渡した変数がYaml形式のファイルに書き込まれること。
