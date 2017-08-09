@@ -23,7 +23,7 @@
                 timeout(time: 10, unit: 'SECONDS')
                 {
                     // ユーザから入力を受け付ける
-                    userInput = input(
+                    def userInput = input(
                         message        :  '''\
                                      |リソース取得先サーバを選択してください。
                                      |（応答時間：10秒）'''.stripMargin(),
@@ -40,6 +40,7 @@
 
                 // 入力されたデータを変数化
                 server = userInput
+                printMsg('info', '変数「server」に「' + server + '」がセットされました。')
             }
             catch(Exception e)
             {
