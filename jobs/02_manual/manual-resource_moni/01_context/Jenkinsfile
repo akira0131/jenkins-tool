@@ -132,7 +132,7 @@
 
                 // 判定結果を変数化
                 def judgeResult = 'warning'
-println judgeResult
+
                 break
 
             // 正常域
@@ -144,6 +144,7 @@ println judgeResult
                 // 判定結果を変数化
                 def judgeResult = 'nomalend'
         }
+        println judgeResult
 
         // 終了メッセージ
         printMsg('info', '-------------------------------------------------------')
