@@ -35,6 +35,7 @@
                             )
                         ]
                     )
+                    println userInput
                 }
 
                 // 入力されたデータを変数化
@@ -47,7 +48,7 @@
                     server = 'batch'
                 }
 
-                printMsg('info', '変数「server」に「' + server + '」がセットされました。')
+                printMsg('info', '変数「server」に「' + userInput + '」がセットされました。')
             }
             catch(Exception e)
             {
