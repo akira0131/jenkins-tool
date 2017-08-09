@@ -132,7 +132,7 @@
 
                 // 判定結果を変数化
                 result = ["${server}": 'warning']
-
+println result = ["${server}"]
                 break
 
             // 正常域
