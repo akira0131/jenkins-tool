@@ -32,13 +32,12 @@
                         parameters     : [
                             choice(
                                 name   : 'リソース取得先サーバ名:',
-                                choices: 'webapサーバ\nバッチサーバ'
+                                choices: 'web/apサーバ\nバッチサーバ'
                             )
                         ]
                     )
                     println userInput
                 }
-                println userInput
             } catch(Exception e)
             {
                 // 変数の中身がnullから変わっていない場合は、例外を投げる
@@ -47,7 +46,7 @@
             }
 println userInput
             // 入力されたデータに合わせて、処理用の値をセット
-            if(userInput == 'webapサーバ')
+            if(userInput == 'web/apサーバ')
             {
                 server = 'webap'
 
