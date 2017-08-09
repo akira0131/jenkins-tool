@@ -132,7 +132,7 @@
 
                 // 判定結果を変数化
                 result.put('wu_execute', 'warning')
-println result['wu_execute']
+
                 break
 
             // 正常域
@@ -144,7 +144,7 @@ println result['wu_execute']
                 // 判定結果を変数化
                 result.put('wu_execute', 'nomalend')
         }
-println result['wu_execute']
+
         // 終了メッセージ
         printMsg('info', '-------------------------------------------------------')
         printMsg('info', 'WU起動数判定ステージ FINISH')
@@ -160,6 +160,7 @@ println result['wu_execute']
      */
     stage('後処理')
     {
+        println server
         println result['wu_execute']
         // WU起動数判定結果により、ジョブ終了ステータスを決定
         switch(result['wu_execute'])
