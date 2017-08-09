@@ -38,13 +38,13 @@
                 }
 
                 // 入力されたデータを変数化
-                if(userInput == 'バッチサーバ')
+                if(userInput == 'web/apサーバ')
                 {
-                    server = 'batch'
+                    server = 'webap'
 
                 } else
                 {
-                    server = userInput
+                    server = 'batch'
                 }
 
                 printMsg('info', '変数「server」に「' + server + '」がセットされました。')
@@ -93,12 +93,12 @@
 
                 // メール通知
                 emailext(
-                    to        : env.mail.address.debug,
-                    subject   : '${DEFAULT_SUBJECT}ABORT',
-                    body      : '''<p>ジョブ走行中に予期せぬエラーが発生しました。</p>
-                                   <p>解析をお願いします。</p>''',
-                    attachLog : false,
-                    mimeType  : 'text/html'
+                    to       : env.mail.address.debug,
+                    subject  : '${DEFAULT_SUBJECT}ABORT',
+                    body     : '''<p>ジョブ走行中に予期せぬエラーが発生しました。</p>
+                                  <p>解析をお願いします。</p>''',
+                    attachLog: false,
+                    mimeType : 'text/html'
                 )
 
                 // 判定結果を変数化
@@ -114,12 +114,12 @@
 
                 // メール通知
                 emailext(
-                    to        : env.mail.address.debug,
-                    subject   : '${DEFAULT_SUBJECT}ABORT',
-                    body      : '''<p>ジョブ走行中に予期せぬエラーが発生しました。</p>
-                                   <p>解析をお願いします。</p>''',
-                    attachLog : false,
-                    mimeType  : 'text/html'
+                    to       : env.mail.address.debug,
+                    subject  : '${DEFAULT_SUBJECT}ABORT',
+                    body     : '''<p>ジョブ走行中に予期せぬエラーが発生しました。</p>
+                                  <p>解析をお願いします。</p>''',
+                    attachLog: false,
+                    mimeType : 'text/html'
                 )
 
                 // 判定結果を変数化
