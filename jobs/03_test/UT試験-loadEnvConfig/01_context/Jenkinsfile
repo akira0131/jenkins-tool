@@ -41,7 +41,7 @@ stage('test-case-2') { timestamps
             def env = loadEnvConfig()
 
             def server = 'batch'
-            println 'env.session."${server}".identity: ' + env.session."${server}".identity
+            println 'env.session.ssh."${server}".identity: ' + env.session.ssh."${server}".identity
         }
         catch(Exception e) {
 
