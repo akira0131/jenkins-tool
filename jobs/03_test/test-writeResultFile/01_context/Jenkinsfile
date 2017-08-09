@@ -4,6 +4,28 @@
 
 node('master') { timestamps
 {
+    stage('前提条件')
+    {
+        // 書込対象のファイル
+        temp = ['path':'/opt/var/jenkins/temp', 'file':'result_test-case-1.yml']
+
+        // ファイルが存在していた場合、削除
+        File f = new File(temp['path'] + "/" + temp['file'])
+        if(f.exists())
+        {
+            f.delete()
+        }
+
+        // 書込対象のファイル
+        temp = ['path':'/opt/var/jenkins/temp', 'file':'result_test-case-2.yml']
+
+        // ファイルが存在していた場合、削除
+        File ff = new File(temp['path'] + "/" + temp['file'])
+        if(ff.exists())
+        {
+            ff.delete()
+        }
+
     /**  UT試験
      *  期待する動作：引数に渡した変数がYaml形式のファイルに書き込まれること。
      */
@@ -43,7 +65,7 @@ node('master') { timestamps
         println 'result: OK'
     }
     /**  UT試験
-      *  期待する動作：引数に渡した変数がYaml形式のファイルに「追記」で書き込まれること。
+      *  期待する動作：既に存在しているファイルは削除され、新たに引数に渡した変数で書き込まれること。
       */
     stage('test-case-3')
     {
