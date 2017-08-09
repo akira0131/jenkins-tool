@@ -2,15 +2,51 @@
 
 @Library('jenkins-common-lib') _
 
-stage('test-loadEnvConfig') { timestamps
+/**  期待する動作：設定をハッシュ値形式で取得できること。
+  */
+stage('test-case-1') { timestamps
 {
     node('master')
     {
-        def env = loadEnvConfig()
+        try
+        {
+            def env = loadEnvConfig()
 
-        println 'env.mail.address.debug:' + env.mail.address.debug
-        println 'env.setting.ssh.timeoutSec: ' + env.settingssh.timeoutSec
-        println 'env.session.webap.identity: ' + env.session.webap.identity
-        println 'env.resource.monitor.wu.execute.faital.keyword: ' + env.resource.monitor.wu.execute.faital.keyword
+            println 'env.mail.address.debug:' + env.mail.address.debug
+            println 'env.setting.ssh.timeoutSec: ' + env.setting.ssh.timeoutSec
+            println 'env.session.webap.identity: ' + env.session.webap.identity
+            println 'env.resource.monitor.wu.execute.faital.keyword: ' + env.resource.monitor.wu.execute.faital.keyword
+            println 'env.size(): ' + env.size()
+        }
+        catch {
+
+            println 'result: NG'
+            throw e
+        }
+
+        println 'result: OK'
+    }
+}}
+
+/**  期待する動作：変数を代入したパラメータで取得できること。
+  */
+stage('test-case-2') { timestamps
+{
+    node('master')
+    {
+        try
+        {
+            def env = loadEnvConfig()
+
+            def server = 'batch'
+            println 'env.session."${server}".identity: ' + env.session."${server}".identity
+        }
+        catch {
+
+            println 'result: NG'
+            throw e
+        }
+
+        println 'result: OK'
     }
 }}
