@@ -59,13 +59,14 @@
                 printMsg('error', '入力されたパラメータが確認できません。応答時間内にリソース取得先サーバを選択してください。')
                 throw e
             }
+            println server + '1'
         }
         catch(Exception e)
         {
             // 変数の宣言重複ができないことを利用して、引き継いだパラメータで後続ステージに進む
             printMsg('info', 'ジョブパラメータ「server」に「' + server + '」がセットされました。')
         }
-        println server + '1'
+        println server + '2'
     }
 
    /** WU起動数判定ステージ
