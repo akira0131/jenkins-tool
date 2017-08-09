@@ -31,7 +31,7 @@
                         parameters     : [
                             choice(
                                 name   : 'リソース取得先サーバ名:',
-                                choices: 'Web/apサーバ\nバッチサーバ'
+                                choices: 'web/apサーバ\nバッチサーバ'
                             )
                         ]
                     )
@@ -44,7 +44,8 @@
             {
                 // 応答時間を過ぎた場合は、例外を投げる
                 printMsg('error', '応答時間内にリソース取得先サーバを選択してください。')
-                throw e
+                error message: 'An error has occurred!'
+                //throw e
             }
         }
     }
