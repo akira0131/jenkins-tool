@@ -37,6 +37,7 @@
                         ]
                     )
                 }
+                println userInput
             } catch(Exception e)
             {
                 // 変数の中身がnullから変わっていない場合は、例外を投げる
@@ -58,6 +59,7 @@ println userInput
 
         } catch(Exception e)
         {
+            println userInput
             // 変数の宣言重複ができないことを利用して、引き継いだパラメータで後続ステージに進む
             printMsg('info', '変数「server」に「' + server + '」がセットされました。')
         }
