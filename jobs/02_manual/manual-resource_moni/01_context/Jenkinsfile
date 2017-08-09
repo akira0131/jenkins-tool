@@ -11,7 +11,7 @@
      * ・
      * ・
      */
-    if(server == null)
+    if(server == null?.toInteger()?.class?.name)
     {
         stage('ジョブパラメータ取得')
         {
