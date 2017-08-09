@@ -161,7 +161,7 @@
     stage('後処理')
     {
         // WU起動数判定結果により、ジョブ終了ステータスを決定
-        switch(result["${server}"])
+        switch(judgeResult["${server}"])
         {
             case 'faital':
 
