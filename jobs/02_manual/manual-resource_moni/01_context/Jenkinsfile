@@ -111,6 +111,7 @@
 
                 // 判定結果を変数化
                 def judgeResult = ["${server}": 'faital']
+                println judgeResult["${server}"]
 
                 break
 
