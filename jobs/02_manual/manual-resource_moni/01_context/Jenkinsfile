@@ -92,25 +92,14 @@
                 printMsg('warning', result['stdout'])
 
                 // メール通知
-                try
-                {
-                    emailext(
-                        to        : env.mail.address.debug,
-                        subject   : '${DEFAULT_SUBJECT}ABORT',
-                        body      : '''<p>ジョブ走行中に予期せぬエラーが発生しました。</p>
-                                        <p>解析をお願いします。</p>''',
-                        attachLog : false,
-                        mimeType  : 'text/html'
-                    )
-
-                    printMsg('info', 'メール通知に成功しました。')
-                    printMsg('info', '送信先アドレス: ' + env.mail.address.debug)
-                }
-                catch(Exception e) {
-
-                    printMsg('error', 'メール通知に失敗しました。')
-                    throw e
-                }
+                emailext(
+                    to        : env.mail.address.debug,
+                    subject   : '${DEFAULT_SUBJECT}ABORT',
+                    body      : '''<p>ジョブ走行中に予期せぬエラーが発生しました。</p>
+                                   <p>解析をお願いします。</p>''',
+                    attachLog : false,
+                    mimeType  : 'text/html'
+                )
 
                 // 判定結果を変数化
                 def judgeResult = ["${server}": 'faital']
@@ -124,25 +113,14 @@
                 printMsg('warning', result['stdout'])
 
                 // メール通知
-                try
-                {
-                    emailext(
-                        to        : env.mail.address.debug,
-                        subject   : '${DEFAULT_SUBJECT}ABORT',
-                        body      : '''<p>ジョブ走行中に予期せぬエラーが発生しました。</p>
-                                        <p>解析をお願いします。</p>''',
-                        attachLog : false,
-                        mimeType  : 'text/html'
-                    )
-
-                    printMsg('info', 'メール通知に成功しました。')
-                    printMsg('info', '送信先アドレス: ' + env.mail.address.debug)
-                }
-                catch(Exception e) {
-
-                    printMsg('error', 'メール通知に失敗しました。')
-                    throw e
-                }
+                emailext(
+                    to        : env.mail.address.debug,
+                    subject   : '${DEFAULT_SUBJECT}ABORT',
+                    body      : '''<p>ジョブ走行中に予期せぬエラーが発生しました。</p>
+                                   <p>解析をお願いします。</p>''',
+                    attachLog : false,
+                    mimeType  : 'text/html'
+                )
 
                 // 判定結果を変数化
                 def judgeResult = ["${server}": 'warning']
