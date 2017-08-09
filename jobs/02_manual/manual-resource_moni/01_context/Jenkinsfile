@@ -144,7 +144,7 @@ println result['wu_execute']
                 // 判定結果を変数化
                 result.put('wu_execute', 'nomalend')
         }
-
+println result['wu_execute']
         // 終了メッセージ
         printMsg('info', '-------------------------------------------------------')
         printMsg('info', 'WU起動数判定ステージ FINISH')
