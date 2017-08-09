@@ -110,7 +110,7 @@
                 )
 
                 // 判定結果を変数化
-                result = ['wu_execute': 'faital']
+                result.put('wu_execute', 'faital')
 
                 break
 
@@ -131,7 +131,7 @@
                 )
 
                 // 判定結果を変数化
-                result = ['wu_execute': 'warning']
+                result.put('wu_execute', 'warning')
 println result = ['wu_execute']
                 break
 
@@ -142,7 +142,7 @@ println result = ['wu_execute']
                 printMsg('info', result['stdout'])
 
                 // 判定結果を変数化
-                result = ['wu_execute': 'nomalend']
+                result.put('wu_execute', 'nomalend')
         }
 
         // 終了メッセージ
