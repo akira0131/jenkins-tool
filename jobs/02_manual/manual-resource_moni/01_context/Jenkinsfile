@@ -43,7 +43,7 @@
                 printMsg('error', '応答時間内にリソース取得先サーバを選択してください。')
                 throw e
             }
-
+println userInput
             // 入力されたデータに合わせて、処理用の値をセット
             if(userInput == 'web/apサーバ')
             {
