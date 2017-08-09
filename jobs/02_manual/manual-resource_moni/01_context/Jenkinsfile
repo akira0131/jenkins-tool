@@ -110,7 +110,7 @@
                 )
 
                 // 判定結果を変数化
-                result = ["${server}": 'faital']
+                result = ['wu_execute': 'faital']
 
                 break
 
@@ -131,8 +131,8 @@
                 )
 
                 // 判定結果を変数化
-                result = ["${server}": 'warning']
-println result = ["${server}"]
+                result = ['wu_execute': 'warning']
+println result = ['wu_execute']
                 break
 
             // 正常域
@@ -142,7 +142,7 @@ println result = ["${server}"]
                 printMsg('info', result['stdout'])
 
                 // 判定結果を変数化
-                result = ["${server}": 'nomalend']
+                result = ['wu_execute': 'nomalend']
         }
 
         // 終了メッセージ
@@ -161,7 +161,7 @@ println result = ["${server}"]
     stage('後処理')
     {
         // WU起動数判定結果により、ジョブ終了ステータスを決定
-        switch(result["${server}"])
+        switch(result['wu_execute'])
         {
             case 'faital':
 
@@ -177,6 +177,6 @@ println result = ["${server}"]
         }
 
         // WU起動数判定結果をDBにインサート
-        writeResultFile(result, 'resource_monitor_wu_execute_' + server)
+        writeResultFile(result['wu_execute'], 'resource_monitor_wu_execute_' + server)
     }
 }}
