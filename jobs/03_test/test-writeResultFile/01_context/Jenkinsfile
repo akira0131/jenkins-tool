@@ -73,7 +73,7 @@ node('master') { timestamps
         try
         {
             server = 'batch'
-            result = ["${server}": 'warning']
+            result = ["${server}": 'nomal']
             writeResultFile(result, 'test-case-2')
         }
         catch(Exception e) {

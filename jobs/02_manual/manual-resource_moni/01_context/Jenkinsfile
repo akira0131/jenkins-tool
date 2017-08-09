@@ -179,6 +179,6 @@
         }
 
         // WU起動数判定結果をDBにインサート
-        writeResultFile(result, 'resource_monitor')
+        writeResultFile(result, 'resource_monitor_wu_execute_' + server)
     }
 }}
