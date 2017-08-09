@@ -17,55 +17,53 @@
         {
             // MissingPropertyException回避のため、仮の値（null）をセット
             def server = null
-
-            try
-            {
-                // 応答に制限時間を設定
-                timeout(time: 10, unit: 'SECONDS')
-                {
-                    // ユーザから入力を受け付ける
-                    userInput = input(
-                        message        :  '''\
-                                     |リソース取得先サーバを選択してください。
-                                     |（応答時間：10秒）'''.stripMargin(),
-                        ok             : '選択する',
-                        parameters     : [
-                            choice(
-                                name   : 'リソース取得先サーバ名:',
-                                choices: 'web/apサーバ\nバッチサーバ'
-                            )
-                        ]
-                    )
-                }
-
-                printMsg('info','入力されたパラメータをチェックします。')
-
-                // 入力されたデータに合わせて、処理用の値をセット
-                if(userInput == 'web/apサーバ')
-                {
-                    server = 'webap'
-                }
-                if(userInput == 'バッチサーバ')
-                {
-                    server = 'batch'
-                }
-
-                printMsg('info', 'ジョブパラメータ「server」に「' + server + '」がセットされました。')
-            }
-            catch(Exception e)
-            {
-                // 変数の中身がnullから変わっていない場合は、例外を投げる
-                // 投げられる例外は、MissingPropertyExceptionだが、可能であれば、タイムアウトを投げたい
-                printMsg('error', '入力されたパラメータが確認できません。応答時間内にリソース取得先サーバを選択してください。')
-                throw e
-            }
-            println server + '1'
         }
         catch(Exception e)
         {
             // 変数の宣言重複ができないことを利用して、引き継いだパラメータで後続ステージに進む
             printMsg('info', 'ジョブパラメータ「server」に「' + server + '」がセットされました。')
         }
-        println server + '2'
+
+        try
+        {
+            // 応答に制限時間を設定
+            timeout(time: 10, unit: 'SECONDS')
+            {
+                // ユーザから入力を受け付ける
+                userInput = input(
+                    message        :  '''\
+                                 |リソース取得先サーバを選択してください。
+                                 |（応答時間：10秒）'''.stripMargin(),
+                    ok             : '選択する',
+                    parameters     : [
+                        choice(
+                            name   : 'リソース取得先サーバ名:',
+                            choices: 'web/apサーバ\nバッチサーバ'
+                        )
+                    ]
+                )
+            }
+
+            printMsg('info','入力されたパラメータをチェックします。')
+
+            // 入力されたデータに合わせて、処理用の値をセット
+            if(userInput == 'web/apサーバ')
+            {
+                server = 'webap'
+            }
+            if(userInput == 'バッチサーバ')
+            {
+                server = 'batch'
+            }
+
+            printMsg('info', 'ジョブパラメータ「server」に「' + server + '」がセットされました。')
+        }
+        catch(Exception e)
+        {
+            // 変数の中身がnullから変わっていない場合は、例外を投げる
+            printMsg('error', '入力されたパラメータが確認できません。応答時間内にリソース取得先サーバを選択してください。')
+            throw e
+        }
+        println server + '1'
     }
 }}
