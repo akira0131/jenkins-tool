@@ -111,7 +111,6 @@
 
                 // 判定結果を変数化
                 def judgeResult = ["${server}": 'faital']
-                println judgeResult["${server}"]
 
                 break
 
@@ -133,7 +132,7 @@
 
                 // 判定結果を変数化
                 def judgeResult = ["${server}": 'warning']
-
+                println judgeResult["${server}"]
                 break
 
             // 正常域
