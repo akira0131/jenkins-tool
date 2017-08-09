@@ -36,7 +36,7 @@
                             )
                         ]
                     )
-                    println userInput
+                    println userInput + '1'
                 }
             } catch(Exception e)
             {
@@ -44,7 +44,7 @@
                 printMsg('error', '応答時間内にリソース取得先サーバを選択してください。')
                 throw e
             }
-println userInput
+println userInput + '2'
             // 入力されたデータに合わせて、処理用の値をセット
             if(userInput == 'web/apサーバ')
             {
