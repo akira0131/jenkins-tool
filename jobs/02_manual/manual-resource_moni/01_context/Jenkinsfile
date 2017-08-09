@@ -17,7 +17,6 @@
         {
             // MissingPropertyException回避のため、仮の値（temp）をセット
             def server = 'temp'
-            def server = 'temp'
 
             try
             {
