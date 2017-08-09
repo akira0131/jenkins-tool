@@ -52,6 +52,7 @@
 
                 printMsg('info', 'ジョブパラメータ「server」に「' + server + '」がセットされました。')
             }
+            println server + '1'
             catch(Exception e)
             {
                 // 変数の中身がnullから変わっていない場合は、例外を投げる
@@ -59,6 +60,7 @@
                 printMsg('error', '入力されたパラメータが確認できません。応答時間内にリソース取得先サーバを選択してください。')
                 throw e
             }
+            println server + '2'
         }
         catch(Exception e)
         {
@@ -66,7 +68,7 @@
             printMsg('info', 'ジョブパラメータ「server」に「' + server + '」がセットされました。')
         }
     }
-println server
+println server + '3'
    /** WU起動数判定ステージ
      * ・
      * ・
