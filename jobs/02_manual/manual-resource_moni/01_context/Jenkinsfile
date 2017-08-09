@@ -32,10 +32,11 @@
                         parameters     : [
                             choice(
                                 name   : 'リソース取得先サーバ名:',
-                                choices: 'webapサーバ' + System.properties['line.separator'] + 'バッチサーバ'
+                                choices: 'webapサーバ\nバッチサーバ'
                             )
                         ]
                     )
+                    println userInput
                 }
                 println userInput
             } catch(Exception e)
