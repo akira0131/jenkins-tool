@@ -36,33 +36,27 @@
                             )
                         ]
                     )
-println userInput + '1'
                 }
-println userInput + '2'
+
+                printMsg('info','入力されたパラメータをチェックします。')
+
+                // 入力されたデータに合わせて、処理用の値をセット
+                if(userInput == 'web/apサーバ')
+                {
+                    server = 'webap'
+                }
+                if(userInput == 'バッチサーバ')
+                {
+                    server = 'batch'
+                }
+
+                printMsg('info', '変数「server」に「' + userInput + '」がセットされました。')
             }
             catch(Exception e)
             {
-                // 制限時間に応答したかどうかに関わらず、必ず通るルート（不思議）
-                printMsg('info','入力されたパラメータをチェックします。')
-            }
-
-            // 入力されたデータに合わせて、処理用の値をセット
-            if(userInput == 'web/apサーバ')
-            {
-                server = 'webap'
-            }
-            if(userInput == 'バッチサーバ')
-            {
-                server = 'batch'
-            }
-            else
-            {
                 // 変数の中身がnullから変わっていない場合は、例外を発生させる
                 printMsg('error', '入力されたパラメータが確認できません。応答時間内にリソース取得先サーバを選択してください。')
-                throw new RuntimeException("timeout")
             }
-
-            printMsg('info', '変数「server」に「' + userInput + '」がセットされました。')
         }
         catch(Exception e)
         {
