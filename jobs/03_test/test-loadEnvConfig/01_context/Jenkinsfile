@@ -15,7 +15,7 @@ stage('test-case-1') { timestamps
 
             println 'env.mail.address.debug:' + env.mail.address.debug
             println 'env.setting.ssh.timeoutSec: ' + env.setting.ssh.timeoutSec
-            println 'env.session.webap.identity: ' + env.session.webap.identity
+            println 'env.session.ssh.webap.identity: ' + env.session.ssh.webap.identity
             println 'env.resource.monitor.wu.execute.faital.keyword: ' + env.resource.monitor.wu.execute.faital.keyword
             println 'env.size(): ' + env.size()
         }
