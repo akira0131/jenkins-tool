@@ -60,6 +60,7 @@ println 'cc'
 
         } catch(Exception e)
         {
+            println 'dd'
             // 変数の宣言重複ができないことを利用して、引き継いだパラメータで後続ステージに進む
             printMsg('info', '変数「server」に「' + server + '」がセットされました。')
         }
