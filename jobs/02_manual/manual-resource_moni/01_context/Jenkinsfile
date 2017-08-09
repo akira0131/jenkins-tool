@@ -32,22 +32,20 @@
                         parameters     : [
                             choice(
                                 name   : 'リソース取得先サーバ名:',
-                                choices: 'web/apサーバ\nバッチサーバ'
+                                choices: 'webapサーバ\nバッチサーバ'
                             )
                         ]
                     )
-                    println 'aaa'
                 }
-                println 'bb'
             } catch(Exception e)
             {
                 // 変数の中身がnullから変わっていない場合は、例外を投げる
                 printMsg('error', '応答時間内にリソース取得先サーバを選択してください。')
                 throw e
             }
-println 'cc'
+println userInput
             // 入力されたデータに合わせて、処理用の値をセット
-            if(userInput == 'web/apサーバ')
+            if(userInput == 'webapサーバ')
             {
                 server = 'webap'
 
@@ -60,7 +58,6 @@ println 'cc'
 
         } catch(Exception e)
         {
-            println 'dd'
             // 変数の宣言重複ができないことを利用して、引き継いだパラメータで後続ステージに進む
             printMsg('info', '変数「server」に「' + server + '」がセットされました。')
         }
