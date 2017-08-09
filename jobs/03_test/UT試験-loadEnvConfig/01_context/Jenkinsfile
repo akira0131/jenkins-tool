@@ -2,12 +2,12 @@
 
 @Library('jenkins-common-lib') _
 
-/**  UT試験
-  *  期待する動作：設定をハッシュ値形式で取得できること。
-  */
-stage('test-case-1') { timestamps
+node('master') { timestamps
 {
-    node('master')
+    /**  UT試験
+     *  期待する動作：設定をハッシュ値形式で取得できること。
+     */
+    stage('test-case-1')
     {
         try
         {
@@ -27,14 +27,11 @@ stage('test-case-1') { timestamps
 
         println 'result: OK'
     }
-}}
 
-/**  UT試験
-  *  期待する動作：変数を代入したパラメータで取得できること。
-  */
-stage('test-case-2') { timestamps
-{
-    node('master')
+    /**  UT試験
+      *  期待する動作：変数を代入したパラメータで取得できること。
+      */
+    stage('test-case-2') { timestamps
     {
         try
         {
