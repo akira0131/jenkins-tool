@@ -36,28 +36,31 @@
                             )
                         ]
                     )
-                    println userInput + '1'
                 }
-                println userInput + '2'
-            } catch(Exception e)
+            }
+            catch(Exception e) {}
+
+            try
+            {
+                // 入力されたデータに合わせて、処理用の値をセット
+                if(userInput == 'web/apサーバ')
+                {
+                server = 'webap'
+
+                } else
+                {
+                    server = 'batch'
+                }
+
+                printMsg('info', '変数「server」に「' + userInput + '」がセットされました。')
+
+            }
+            catch(Exception e)
             {
                 // 変数の中身がnullから変わっていない場合は、例外を投げる
                 printMsg('error', '応答時間内にリソース取得先サーバを選択してください。')
                 throw e
             }
-println userInput + '3'
-            // 入力されたデータに合わせて、処理用の値をセット
-            if(userInput == 'web/apサーバ')
-            {
-                server = 'webap'
-
-            } else
-            {
-                server = 'batch'
-            }
-
-            printMsg('info', '変数「server」に「' + userInput + '」がセットされました。')
-
         } catch(Exception e)
         {
             println userInput
