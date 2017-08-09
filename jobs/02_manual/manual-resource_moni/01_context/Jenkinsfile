@@ -21,7 +21,7 @@
             try
             {
                 // 応答に制限時間を設定
-                timeout(time: 10, unit: 'SECONDS')
+                timeout(time: 20, unit: 'SECONDS')
                 {
                     // ユーザから入力を受け付ける
                     def userInput = input(
