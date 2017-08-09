@@ -15,8 +15,8 @@
     {
         try
         {
-            // MissingPropertyException回避のため、仮の値（null）をセット
-            def server = null
+            // MissingPropertyException回避のため、仮の値（temp）をセット
+            def server = 'temp'
 
             try
             {
@@ -41,7 +41,7 @@
             {
                 println userInput
                 println server
-                if(server != null)
+                if(server != 'temp')
                 {
                     // 入力されたデータに合わせて、処理用の値をセット
                     if(userInput == 'web/apサーバ')
