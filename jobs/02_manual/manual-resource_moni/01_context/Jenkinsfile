@@ -24,7 +24,7 @@
                 timeout(time: 20, unit: 'SECONDS')
                 {
                     // ユーザから入力を受け付ける
-                    def userInput = input(
+                    userInput = input(
                         message        :  '''\
                                      |リソース取得先サーバを選択してください。
                                      |（応答時間：10秒）'''.stripMargin(),
@@ -36,6 +36,7 @@
                             )
                         ]
                     )
+println userInput
                 }
             }
             catch(Exception e)
@@ -64,7 +65,6 @@
         }
         catch(Exception e)
         {
-            println userInput
             // 変数の宣言重複ができないことを利用して、引き継いだパラメータで後続ステージに進む
             printMsg('info', '変数「server」に「' + server + '」がセットされました。')
         }
