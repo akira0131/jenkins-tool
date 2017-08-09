@@ -132,7 +132,7 @@
 
                 // 判定結果を変数化
                 def judgeResult = 'warning'
-
+println judgeResult
                 break
 
             // 正常域
@@ -160,6 +160,7 @@
      */
     stage('後処理')
     {
+        println judgeResult
         // WU起動数判定結果により、ジョブ終了ステータスを決定
         switch(judgeResult)
         {
