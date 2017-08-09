@@ -40,6 +40,7 @@
             } catch(Exception e)
             {
                 println userInput
+                println server
                 if(server != null)
                 {
                     // 入力されたデータに合わせて、処理用の値をセット
