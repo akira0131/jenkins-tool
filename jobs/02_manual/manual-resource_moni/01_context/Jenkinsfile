@@ -38,16 +38,20 @@
                     )
                 }
             }
-            catch(Exception e) {}
+            catch(Exception e)
+            {
+                // 制限時間に応答したかどうかに関わらず、必ず通るルート（不思議）
+                printMsg('info','入力されたパラメータをチェックします。')
+            }
 
             try
             {
                 // 入力されたデータに合わせて、処理用の値をセット
                 if(userInput == 'web/apサーバ')
                 {
-                server = 'webap'
-
-                } else
+                    server = 'webap'
+                }
+                else
                 {
                     server = 'batch'
                 }
@@ -58,10 +62,11 @@
             catch(Exception e)
             {
                 // 変数の中身がnullから変わっていない場合は、例外を投げる
-                printMsg('error', '応答時間内にリソース取得先サーバを選択してください。')
+                printMsg('error', '入力されたパラメータが確認できません。応答時間内にリソース取得先サーバを選択してください。')
                 throw e
             }
-        } catch(Exception e)
+        }
+        catch(Exception e)
         {
             println userInput
             // 変数の宣言重複ができないことを利用して、引き継いだパラメータで後続ステージに進む
