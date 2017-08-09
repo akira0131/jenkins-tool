@@ -11,8 +11,10 @@
      * ・
      * ・
      */
-    if(server == null?.toInteger()?.class?.name)
+    try
     {
+        def server = null
+
         stage('ジョブパラメータ取得')
         {
             try
@@ -36,7 +38,7 @@
                 }
 
                 // 入力されたデータを変数化
-                def server = userInput
+                server = userInput
             }
             catch(Exception e)
             {
@@ -46,6 +48,7 @@
             }
         }
     }
+    catch(Exception e) {}
 
    /** WU起動数判定ステージ
      * ・
