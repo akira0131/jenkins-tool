@@ -39,7 +39,15 @@
                 }
 
                 // 入力されたデータを変数化
-                server = userInput
+                if(userInput == 'バッチサーバ')
+                {
+                    server = 'batch'
+
+                } else
+                {
+                    server = userInput
+                }
+
                 printMsg('info', '変数「server」に「' + server + '」がセットされました。')
             }
             catch(Exception e)
