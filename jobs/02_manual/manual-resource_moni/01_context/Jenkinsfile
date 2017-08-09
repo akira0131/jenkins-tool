@@ -50,7 +50,7 @@
                     server = 'batch'
                 }
 
-                printMsg('info', '変数「server」に「' + userInput + '」がセットされました。')
+                printMsg('info', 'ジョブパラメータ「server」に「' + server + '」がセットされました。')
             }
             catch(Exception e)
             {
