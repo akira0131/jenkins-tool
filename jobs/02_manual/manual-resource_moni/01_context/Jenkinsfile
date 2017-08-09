@@ -36,8 +36,9 @@
                             )
                         ]
                     )
-println userInput
+println userInput + '1'
                 }
+println userInput + '2'
             }
             catch(Exception e)
             {
