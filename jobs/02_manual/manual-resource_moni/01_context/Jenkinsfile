@@ -21,7 +21,7 @@
             try
             {
                 // 応答に制限時間を設定
-                timeout(time: 20, unit: 'SECONDS')
+                timeout(time: 10, unit: 'SECONDS')
                 {
                     // ユーザから入力を受け付ける
                     userInput = input(
@@ -56,6 +56,7 @@
             {
                 // 変数の中身がnullから変わっていない場合は、例外を発生させる
                 printMsg('error', '入力されたパラメータが確認できません。応答時間内にリソース取得先サーバを選択してください。')
+                throw e
             }
         }
         catch(Exception e)
