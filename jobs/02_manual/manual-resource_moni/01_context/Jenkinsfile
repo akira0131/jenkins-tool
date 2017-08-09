@@ -15,13 +15,13 @@
     {
         try
         {
-            // MissingPropertyException回避のため、仮の値（null）をセットする
+            // MissingPropertyException回避のため、仮の値（null）をセット
             def server = null
 
             try
             {
                 // 応答に制限時間を設定
-                timeout(time: 20, unit: 'SECONDS')
+                timeout(time: 10, unit: 'SECONDS')
                 {
                     // ユーザから入力を受け付ける
                     def userInput = input(
@@ -41,7 +41,7 @@
             {
                 if(server != null)
                 {
-                    // 入力されたデータを変数化
+                    // 入力されたデータに合わせて、処理用の値をセット
                     if(userInput == 'web/apサーバ')
                     {
                         server = 'webap'
