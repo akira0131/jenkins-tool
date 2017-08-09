@@ -110,7 +110,7 @@
                 )
 
                 // 判定結果を変数化
-                def judgeResult = 'faital'
+                result = ["${server}": 'faital']
 
                 break
 
@@ -131,7 +131,7 @@
                 )
 
                 // 判定結果を変数化
-                def judgeResult = 'warning'
+                result = ["${server}": 'warning']
 
                 break
 
@@ -142,9 +142,8 @@
                 printMsg('info', result['stdout'])
 
                 // 判定結果を変数化
-                def judgeResult = 'nomalend'
+                result = ["${server}": 'nomalend']
         }
-        println judgeResult
 
         // 終了メッセージ
         printMsg('info', '-------------------------------------------------------')
@@ -161,11 +160,10 @@
      */
     stage('後処理')
     {
-        println judgeResult
         // WU起動数判定結果により、ジョブ終了ステータスを決定
-        switch(judgeResult)
+        switch(result["${server}"])
         {
-            case 'fatal':
+            case 'faital':
 
                 currentBuild.result = 'FAILURE'
 
