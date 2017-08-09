@@ -28,6 +28,7 @@
                                      |リソース取得先サーバを選択してください。
                                      |（応答時間：10秒）'''.stripMargin(),
                         ok             : '選択する',
+                        abort          : '終了する',
                         parameters     : [
                             choice(
                                 name   : 'リソース取得先サーバ名:',
@@ -44,8 +45,7 @@
             {
                 // 応答時間を過ぎた場合は、例外を投げる
                 printMsg('error', '応答時間内にリソース取得先サーバを選択してください。')
-                error message: 'An error has occurred!'
-                //throw e
+                throw e
             }
         }
     }
