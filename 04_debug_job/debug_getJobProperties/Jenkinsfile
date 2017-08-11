@@ -1,0 +1,25 @@
+#!groovy
+
+@Library('jenkins-common-lib') _
+
+node('master') { timestamps
+{
+    stage('他のプロジェクトの環境変数取得')
+    {
+        try
+        {
+            def jobname = "manual-resource_moni"
+            def envname = "WORKSPACE"
+            def job = hudson.model.Hudson.instance.getItem(jobname)
+            def envVars= job.lastBuild.properties.get("envVars")
+            println envVars[envname]
+        }
+        catch(Exception e) {
+
+            println 'result: NG'
+            throw e
+        }
+
+        println 'result: OK'
+    }
+}}
