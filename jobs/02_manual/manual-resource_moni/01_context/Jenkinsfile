@@ -107,7 +107,7 @@
                 )
 
                 // 判定結果を変数化
-                def result_wu_execute = 'faital'
+                def result.put('wu_execute', 'faital')
 
                 break
 
@@ -128,7 +128,7 @@
                 )
 
                 // 判定結果を変数化
-                def result_wu_execute = 'warning'
+                result.put('wu_execute', 'warning')
 
                 break
 
@@ -139,9 +139,9 @@
                 printMsg('info', result['stdout'])
 
                 // 判定結果を変数化
-                def result_wu_execute = 'nomalend'
+                result.put('wu_execute', 'nomalend')
         }
-
+def result_wu_execute = 'warning'
         // 終了メッセージ
         printMsg('info', '-------------------------------------------------------')
         printMsg('info', 'WU起動数判定ステージ FINISH')
