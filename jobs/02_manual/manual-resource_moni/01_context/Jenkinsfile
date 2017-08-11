@@ -27,13 +27,13 @@
         try
         {
             // 応答に制限時間を設定
-            timeout(time: 10, unit: 'SECONDS')
+            timeout(time: 30, unit: 'SECONDS')
             {
                 // ユーザから入力を受け付ける
                 userInput = input(
                     message        : '''\
                                      |リソース取得先サーバを選択してください。
-                                     |（応答時間：10秒）'''.stripMargin(),
+                                     |（応答時間：30秒）'''.stripMargin(),
                     ok             : '選択する',
                     parameters     : [
                         choice(
@@ -86,7 +86,7 @@
         // リソース取得シェル実行
         def result = sshCmd(env, server, 'ls /opt/app/lib')
 
-        // 標準エラー出力が返却されている場合は、例外を投げる
+        // 標準エラーが返却されている場合は、例外を投げる
         assert result['stderror'] == null
 
         // WU起動数結果判定
