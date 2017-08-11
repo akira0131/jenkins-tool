@@ -157,6 +157,7 @@
     stage('後処理')
     {
         // ジョブ結果をファイルに出力
-        writeDataToFile(currentBuild, 'result_resource_monitor_' + server)
+        writeDataToFile(currentBuild.result, 'result_resource_monitor_' + server)
+        println currentBuild
     }
 }}
