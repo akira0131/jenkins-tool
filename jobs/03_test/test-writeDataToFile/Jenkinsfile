@@ -89,7 +89,7 @@ node('master') { timestamps
         printMsg('info', '期待する動作：引数で渡した変数がファイルの書き出しに成功すること。')
         try
         {
-            result = ['stodout': 'nomal\nwarning']
+            result = ['stdout': 'nomal\nwarning']
             result.put('stdout', 'aiueo\nkakikukeko\nsasisuseso\ntatituteto\nnaninuneno')
             writeDataToFile(result, 'test-case-4')
         }
