@@ -131,6 +131,7 @@
 
                 // 判定結果を変数化
                 result.put('wu_execute', 'warning')
+                println result['wu_execute']
 
                 break
 
