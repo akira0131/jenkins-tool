@@ -24,7 +24,7 @@ node('master') { timestamps
 
         println 'result: OK'
     }
-    stage('自分のプロジェクトの環境変数取得')
+    stage('自分のプロジェクトの環境変数取得-1')
     {
         try
         {
@@ -42,9 +42,38 @@ node('master') { timestamps
 
             printMsg('info','環境変数一覧（要素番号付き）')
             env.eachWithIndex { val,i -> println "index:${i} value:${val}" }
+        }
+        catch(Exception e) {
 
-            sh 'env > env.txt'
-            for (String i : readFile('env.txt').split("\r?\n")) {
+            println 'result: NG'
+            throw e
+        }
+
+        println 'result: OK'
+    }
+    stage('自分のプロジェクトの環境変数取得-2')
+    {
+        try
+        {
+            sh 'env > /opt/var/jenkins/temp/env.txt'
+            for (String i : readFile('/opt/var/jenkins/temp/env.txt').split("\r?\n")) {
+                println i
+            }
+        }
+        catch(Exception e) {
+
+            println 'result: NG'
+            throw e
+        }
+
+        println 'result: OK'
+    }
+    stage('自分のプロジェクトの環境変数取得-3')
+    {
+        try
+        {
+            sh 'currentBuild > /opt/var/jenkins/temp/currentBuild.txt'
+            for (String i : readFile('/opt/var/jenkins/temp/currentBuild.txt').split("\r?\n")) {
                 println i
             }
         }
