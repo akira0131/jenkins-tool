@@ -109,6 +109,10 @@
                 // 判定結果をジョブ終了ステータスに反映
                 currentBuild.result = 'FAILURE'
 
+                // 判定結果をファイルに出力
+                result.put('wu_execute', 'faital')
+                writeDataToFile(result['wu_execute'], 'result_' + JOB_NAME + '_' + server)
+
                 break
 
             // 注意域
@@ -132,7 +136,7 @@
 
                 // 判定結果をファイルに出力
                 result.put('wu_execute', 'warning')
-                writeDataToFile(result['wu_execute'], 'result_' + currentBuild.displayName + '_' + server)
+                writeDataToFile(result['wu_execute'], 'result_' + JOB_NAME + '_' + server)
 
                 break
 
@@ -144,6 +148,10 @@
 
                 // 判定結果をジョブ終了ステータスに反映
                 currentBuild.result = 'SUCCESS'
+
+                // 判定結果をファイルに出力
+                result.put('wu_execute', 'normalend')
+                writeDataToFile(result['wu_execute'], 'result_' + JOB_NAME + '_' + server)
 
                 break
         }
