@@ -157,7 +157,7 @@
      */
     stage('後処理')
     {
-        def resutl = ['wu_execute': 'warning']
+        def result = ['wu_execute': 'warning']
         println 'パラメータチェック: ' + result['wu_execute']
         // WU起動数判定結果により、ジョブ終了ステータスを決定
         switch(result['wu_execute'])
