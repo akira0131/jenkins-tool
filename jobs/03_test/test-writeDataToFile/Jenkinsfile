@@ -29,7 +29,7 @@ node('master') { timestamps
         try
         {
             result = ['webap': 'faital']
-            writeResultFile(result, 'test-case-1')
+            writeDataToFile(result, 'test-case-1')
         }
         catch(Exception e) {
             println 'result: NG'
@@ -44,7 +44,7 @@ node('master') { timestamps
         {
             server = 'batch'
             result = ["${server}": 'warning']
-            writeResultFile(result, 'test-case-2')
+            writeDataToFile(result, 'test-case-2')
         }
         catch(Exception e) {
             println 'result: NG'
@@ -59,7 +59,7 @@ node('master') { timestamps
         {
             server = 'batch'
             result = ["${server}": 'nomal']
-            writeResultFile(result, 'test-case-2')
+            writeDataToFile(result, 'test-case-2')
         }
         catch(Exception e) {
             println 'result: NG'
@@ -73,7 +73,7 @@ node('master') { timestamps
         try
         {
             result = ['stodout': 'nomal\nwarning']
-            writeResultFile(result, 'test-case-2')
+            writeDataToFile(result, 'test-case-2')
         }
         catch(Exception e) {
             println 'result: NG'
