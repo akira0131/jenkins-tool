@@ -72,10 +72,11 @@ node('master') { timestamps
     {
         try
         {
-            sh 'currentBuild > /opt/var/jenkins/temp/currentBuild.txt'
-            for (String i : readFile('/opt/var/jenkins/temp/currentBuild.txt').split("\r?\n")) {
-                println i
-            }
+            //sh 'currentBuild > /opt/var/jenkins/temp/currentBuild.txt'
+            //for (String i : readFile('/opt/var/jenkins/temp/currentBuild.txt').split("\r?\n")) {
+            //    println i
+            //}
+            currentBuild.dump()
         }
         catch(Exception e) {
 
