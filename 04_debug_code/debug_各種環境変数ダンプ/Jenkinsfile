@@ -70,15 +70,33 @@ node('master') { timestamps
 
         println 'result: OK'
     }
-    stage('自分のプロジェクトの環境変数取得-3')
+    stage('currentBuild編')
     {
         try
         {
-            //sh 'currentBuild > /opt/var/jenkins/temp/currentBuild.txt'
-            //for (String i : readFile('/opt/var/jenkins/temp/currentBuild.txt').split("\r?\n")) {
-            //    println i
-            //}
-            currentBuild.dump()
+            [
+                'number',
+                'result',
+                'currentResult',
+                'resultIsBetterOrEqualTo',
+                'resultIsWorseOrEqualTo',
+                'displayName',
+                'description',
+                'id',
+                'timeInMillis',
+                'startTimeInMillis',
+                'duration',
+                'durationString',
+                'previousBuild',
+                'nextBuild',
+                'similarly',
+                'absoluteUrl',
+                'buildVariables',
+                'changeSets',
+                'rawBuild'
+            ].each { subclass ->
+                println 'currentBuild.' + "${subclass}" + ': ' + currentBuild."${subclass}"
+            }
         }
         catch(Exception e) {
 
