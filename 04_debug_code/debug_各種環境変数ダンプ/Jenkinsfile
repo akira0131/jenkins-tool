@@ -28,16 +28,6 @@ node('master') { timestamps
     {
         try
         {
-            printMsg('info', 'ジョブ固有の環境変数参照')
-
-            printMsg('info', 'BUILD_NUMBER: ' + env.BUILD_NUMBER)
-            printMsg('info', 'BUILD_ID: ' + env.BUILD_ID)
-            printMsg('info', 'WORKSPACE: ' + env.WORKSPACE)
-            printMsg('info', 'JENKINS_URL: ' + env.JENKINS_URL)
-            printMsg('info', 'BUILD_URL: ' + env.BUILD_URL)
-            printMsg('info', 'JOB_URL: ' + env.JOB_URL)
-
-            printMsg('info','環境変数一覧')
             env.each { println it }
         }
         catch(Exception e) {
@@ -48,7 +38,7 @@ node('master') { timestamps
 
         println 'result: OK'
     }
-    stage('自分のプロジェクトの環境変数取得-2')
+    stage('env編')
     {
         try
         {
@@ -83,7 +73,7 @@ node('master') { timestamps
                 'durationString',
                 'previousBuild',
                 'nextBuild',
-                'similarly',
+                //'similarly',
                 'absoluteUrl',
                 'buildVariables',
                 'changeSets',
