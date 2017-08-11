@@ -131,7 +131,7 @@
                 currentBuild.result = 'FAILURE'
 
                 // 判定結果をファイルに出力
-                result.put('wu_execute', 'warning')
+                //result.put('wu_execute', 'warning')
                 writeDataToFile(result, 'result_' + currentBuild.displayName + '_' + server)
 
                 break
