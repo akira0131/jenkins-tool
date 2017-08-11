@@ -77,7 +77,7 @@ node('master') { timestamps
                 'absoluteUrl',
                 'buildVariables',
                 'changeSets',
-                'rawBuild'
+                //'rawBuild'
             ].each { subclass ->
                 println 'currentBuild.' + "${subclass}" + ': ' + currentBuild."${subclass}"
             }
