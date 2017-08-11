@@ -55,7 +55,7 @@ node('master') { timestamps
     {
         try
         {
-            current_env = this.getProperty("env"). getEnvironment()
+            current_env = this.getProperty("env").getEnvironment()
             writeDataToFile(current_env, 'env2')
             sh 'env > /opt/var/jenkins/temp/env.txt'
             for (String i : readFile('/opt/var/jenkins/temp/env.txt').split("\r?\n")) {
