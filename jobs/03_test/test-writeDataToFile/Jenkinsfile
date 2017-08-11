@@ -91,6 +91,20 @@ node('master') { timestamps
         {
             result = ['stdout': 'nomal\nwarning']
             result.put('stdout', 'aiueo\nkakikukeko\nsasisuseso\ntatituteto\nnaninuneno')
+            result.put('''groovy-ssh-2.9.0.jar
+jna-4.1.0.jar
+jna-platform-4.1.0.jar
+jsch-0.1.53.jar
+jsch.agentproxy.connector-factory-0.0.9.jar
+jsch.agentproxy.core-0.0.9.jar
+jsch.agentproxy.jsch-0.0.9.jar
+jsch.agentproxy.pageant-0.0.9.jar
+jsch.agentproxy.sshagent-0.0.9.jar
+jsch.agentproxy.usocket-jna-0.0.9.jar
+jsch.agentproxy.usocket-nc-0.0.9.jar
+slf4j-api-1.7.7.jar
+slf4j-log4j12-1.7.7.jar
+slf4j-simple-1.7.7.jar''')
             writeDataToFile(result, 'test-case-4')
         }
         catch(Exception e) {
