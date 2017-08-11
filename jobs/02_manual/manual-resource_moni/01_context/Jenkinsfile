@@ -140,6 +140,8 @@
 
                 // 判定結果をジョブ終了ステータスに反映
                 currentBuild.result = 'SUCCESS'
+
+                break
         }
 
         printMsg('info', '-------------------------------------------------------')
@@ -157,7 +159,6 @@
     stage('後処理')
     {
         // ジョブ結果をファイルに出力
-        writeDataToFile(currentBuild.result, 'result_resource_monitor_' + server)
-        println currentBuild
+        writeDataToFile(result, 'result_resource_monitor_' + server)
     }
 }}
