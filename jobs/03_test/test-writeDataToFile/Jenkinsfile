@@ -39,6 +39,7 @@ node('master') { timestamps
     }
     stage('test-case-2')
     {
+        printMsg('info', '試験条件：キーが変数でマップされた変数を引数で渡す。')
         printMsg('info', '期待する動作：引数で渡した変数がファイルの書き出しに成功すること。')
         try
         {
@@ -69,11 +70,28 @@ node('master') { timestamps
     }
     stage('test-case-4')
     {
-        printMsg('info', '期待する動作：改行を含んでいる変数を引数で渡してもファイルの書き出しに成功すること。')
+        printMsg('info', '試験条件：改行を含んでいる変数を引数で渡す。')
+        printMsg('info', '期待する動作：引数で渡した変数がファイルの書き出しに成功すること。')
         try
         {
             result = ['stodout': 'nomal\nwarning']
-            writeDataToFile(result, 'test-case-2')
+            writeDataToFile(result, 'test-case-4')
+        }
+        catch(Exception e) {
+            println 'result: NG'
+            throw e
+        }
+        println 'result: OK'
+    }
+    stage('test-case-5')
+    {
+        printMsg('info', '試験条件：複数マップされた変数を引数で渡す。')
+        printMsg('info', '期待する動作：引数で渡した変数がファイルの書き出しに成功すること。')
+        try
+        {
+            result = ['stodout': 'nomal\nwarning']
+            result.put('stdout', 'aiueo\nkakikukeko\nsasisuseso\ntatituteto\nnaninuneno')
+            writeDataToFile(result, 'test-case-4')
         }
         catch(Exception e) {
             println 'result: NG'
