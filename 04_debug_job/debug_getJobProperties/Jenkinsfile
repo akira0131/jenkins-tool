@@ -42,6 +42,9 @@ node('master') { timestamps
 
             printMsg('info','環境変数一覧（要素番号付き）')
             env.eachWithIndex { val,i -> println "index:${i} value:${val}" }
+
+            printMsg('info','ファイルに出力')
+            writeDataToFile(env, 'result_debug-getJobProperties')
         }
         catch(Exception e) {
 
