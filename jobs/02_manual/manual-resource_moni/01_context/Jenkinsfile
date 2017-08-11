@@ -106,8 +106,8 @@
                     mimeType : 'text/html'
                 )
 
-                // 判定結果を変数化
-                result.put('wu_execute', 'faital')
+                // 判定結果をジョブ終了ステータスに反映
+                currentBuild.result = 'FAILURE'
 
                 break
 
@@ -127,8 +127,8 @@
                     mimeType : 'text/html'
                 )
 
-                // 判定結果を変数化
-                result.put('wu_execute', 'warning')
+                // 判定結果をジョブ終了ステータスに反映
+                currentBuild.result = 'FAILURE'
 
                 break
 
@@ -138,39 +138,25 @@
                 // コマンド結果を標準出力
                 printMsg('info', result['stdout'])
 
-                // 判定結果を変数化
-                result.put('wu_execute', 'nomalend')
+                // 判定結果をジョブ終了ステータスに反映
+                currentBuild.result = 'SUCCESS'
         }
-def result_wu_execute = 'warning'
+
         // 終了メッセージ
         printMsg('info', '-------------------------------------------------------')
         printMsg('info', 'WU起動数判定ステージ FINISH')
         printMsg('info', '-------------------------------------------------------')
+    }
 
-        println 'パラメータチェック: ' + result_wu_execute
-        def result = ['wu_execute': 'warning']
-        println 'パラメータチェック: ' + result['wu_execute']
-        println 'パラメータチェック: ' + env
-        println 'パラメータチェック: ' + server
-        // WU起動数判定結果により、ジョブ終了ステータスを決定
-        switch(result['wu_execute'])
-        {
-            case 'faital':
-
-                currentBuild.result = 'FAILURE'
-                break
-
-            case 'warning':
-
-                currentBuild.result = 'FAILURE'
-                break
-
-            case 'nomalend':
-
-                currentBuild.result = 'SUCCESS'
-                break
-        }
-
+   /** WU起動数判定ステージ
+     * ・
+     * ・
+     * ・
+     * ・
+     * ・
+     */
+    stage('後処理')
+    {
         // WU起動数判定結果をDBにインサート
         writeResultFile(result['wu_execute'], 'resource_monitor_wu_execute_' + server)
     }
