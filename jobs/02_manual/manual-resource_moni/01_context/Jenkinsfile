@@ -156,7 +156,7 @@
      */
     stage('後処理')
     {
-        // WU起動数判定結果をDBにインサート
-        writeResultFile(currentBuild, 'resource_monitor_wu_execute_' + server)
+        // ジョブ結果をファイルに出力
+        writeDataToFile(currentBuild, 'result_resource_monitor_' + server)
     }
 }}
