@@ -90,8 +90,8 @@ node('master') { timestamps
         try
         {
             result = ['stdout': 'nomal\nwarning']
-            result.put('stdout', 'aiueo\nkakikukeko\nsasisuseso\ntatituteto\nnaninuneno')
-            result.put('''groovy-ssh-2.9.0.jar
+            result.put('stderror', 'aiueo\nkakikukeko\nsasisuseso\ntatituteto\nnaninuneno')
+            result.put('wu_execute','''groovy-ssh-2.9.0.jar
 jna-4.1.0.jar
 jna-platform-4.1.0.jar
 jsch-0.1.53.jar
