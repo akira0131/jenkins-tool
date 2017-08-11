@@ -15,12 +15,12 @@
     {
         try
         {
-            // MissingPropertyException回避のため、仮の値（null）をセット
+            // 仮の値（null）をセット
             def server = null
         }
-        catch(Exception e)
+        catch(MissingPropertyException e)
         {
-            // 変数の宣言重複ができないことを利用して、引き継いだパラメータで後続ステージに進む
+            // 呼び出されたジョブから引き継いだパラメータで後続ステージに進む
             printMsg('info', 'ジョブパラメータ「server」に「' + server + '」がセットされました。')
         }
 
@@ -31,9 +31,9 @@
             {
                 // ユーザから入力を受け付ける
                 userInput = input(
-                    message        :  '''\
-                                 |リソース取得先サーバを選択してください。
-                                 |（応答時間：10秒）'''.stripMargin(),
+                    message        : '''\
+                                     |リソース取得先サーバを選択してください。
+                                     |（応答時間：10秒）'''.stripMargin(),
                     ok             : '選択する',
                     parameters     : [
                         choice(
@@ -43,28 +43,27 @@
                     ]
                 )
             }
-
-            printMsg('info','入力されたパラメータをチェックします。')
-
-            // 入力されたデータに合わせて、処理用の値をセット
-            if(userInput == 'web/apサーバ')
-            {
-                server = 'webap'
-            }
-            if(userInput == 'バッチサーバ')
-            {
-                server = 'batch'
-            }
-
-            printMsg('info', 'ジョブパラメータ「server」に「' + server + '」がセットされました。')
         }
         catch(Exception e)
         {
-            // 変数の中身がnullから変わっていない場合は、例外を投げる
-            // try catch文の中にtry catch文を含めると、挙動がおかしくなる（不思議）
+            // 制限時間内に変数の中身がnullから変わっていない場合は、例外を投げる
             printMsg('error', '入力されたパラメータが確認できません。応答時間内にリソース取得先サーバを選択してください。')
             throw e
         }
+
+        printMsg('info','入力されたパラメータをチェックします。')
+
+        // 入力されたデータに合わせて、処理用の値をセット
+        if(userInput == 'web/apサーバ')
+        {
+            server = 'webap'
+        }
+        if(userInput == 'バッチサーバ')
+        {
+            server = 'batch'
+        }
+
+        printMsg('info', 'ジョブパラメータ「server」に「' + server + '」がセットされました。')
     }
 
    /** WU起動数判定ステージ
@@ -166,14 +165,17 @@
             case 'faital':
 
                 currentBuild.result = 'FAILURE'
+                break
 
             case 'warning':
 
                 currentBuild.result = 'FAILURE'
+                break
 
             case 'nomalend':
 
                 currentBuild.result = 'SUCCESS'
+                break
         }
 
         // WU起動数判定結果をDBにインサート
