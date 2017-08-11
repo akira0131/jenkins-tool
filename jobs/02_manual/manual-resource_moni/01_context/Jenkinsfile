@@ -157,6 +157,7 @@
      */
     stage('後処理')
     {
+        println 'パラメータチェック: ' + result
         def result = ['wu_execute': 'warning']
         println 'パラメータチェック: ' + result['wu_execute']
         println 'パラメータチェック: ' + env
