@@ -107,7 +107,7 @@
                 )
 
                 // 判定結果を変数化
-                def result.put('wu_execute', 'faital')
+                result.put('wu_execute', 'faital')
 
                 break
 
