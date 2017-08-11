@@ -4,10 +4,13 @@
 
 node('master') { timestamps
 {
+    stage('前提処理')
+    {
+        result = ['wu_execute':'warning']
+    }
     stage('test-case-1')
     {
         printMsg('info','期待する動作：指定したプロパティの内容によって、ジョブステータスがかえられること。')
-        result = ['wu_execute':'warning']
 
         try
         {
