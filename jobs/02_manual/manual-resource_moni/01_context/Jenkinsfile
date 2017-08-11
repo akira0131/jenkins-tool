@@ -158,6 +158,6 @@
     stage('後処理')
     {
         // WU起動数判定結果をDBにインサート
-        writeResultFile(result['wu_execute'], 'resource_monitor_wu_execute_' + server)
+        writeResultFile(currentBuild.result, 'resource_monitor_wu_execute_' + server)
     }
 }}
