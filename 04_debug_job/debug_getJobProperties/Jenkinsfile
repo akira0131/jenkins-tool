@@ -30,12 +30,12 @@ node('master') { timestamps
         {
             printMsg('info', 'ジョブ固有の環境変数参照')
 
-            printMsg('info', 'BUILD_NUMBER: ' + env.BUILD_NUMBER
-            printMsg('info', 'BUILD_ID: ' + env.BUILD_ID
-            printMsg('info', 'WORKSPACE: ' + env.WORKSPACE
-            printMsg('info', 'JENKINS_URL: ' + env.JENKINS_URL
-            printMsg('info', 'BUILD_URL: ' + env.BUILD_URL
-            printMsg('info', 'JOB_URL: ' + env.JOB_URL
+            printMsg('info', 'BUILD_NUMBER: ' + env.BUILD_NUMBER)
+            printMsg('info', 'BUILD_ID: ' + env.BUILD_ID)
+            printMsg('info', 'WORKSPACE: ' + env.WORKSPACE)
+            printMsg('info', 'JENKINS_URL: ' + env.JENKINS_URL)
+            printMsg('info', 'BUILD_URL: ' + env.BUILD_URL)
+            printMsg('info', 'JOB_URL: ' + env.JOB_URL)
         }
         catch(Exception e) {
 
