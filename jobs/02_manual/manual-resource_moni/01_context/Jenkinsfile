@@ -159,7 +159,7 @@
     {
         def result = ['wu_execute': 'warning']
         println 'パラメータチェック: ' + result['wu_execute']
-        println 'パラメータチェック: ' + env]
+        println 'パラメータチェック: ' + env
         // WU起動数判定結果により、ジョブ終了ステータスを決定
         switch(result['wu_execute'])
         {
