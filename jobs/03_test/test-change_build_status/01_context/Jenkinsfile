@@ -6,7 +6,8 @@ node('master') { timestamps
 {
     stage('前提処理')
     {
-        result = ['wu_execute':'warning']
+        result = ['test':'warning']
+        result.put('wu_execute', 'nomalend')
     }
     stage('test-case-1')
     {
