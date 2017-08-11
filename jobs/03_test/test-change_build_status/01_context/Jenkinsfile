@@ -1,0 +1,41 @@
+#!groovy
+
+@Library('jenkins-common-lib') _
+
+node('master') { timestamps
+{
+    stage('test-case-1')
+    {
+        printMsg('info','期待する動作：指定したプロパティの内容によって、ジョブステータスがかえられること。')
+        result = ['wu_execute':'warning']
+
+        try
+        {
+            // WU起動数判定結果により、ジョブ終了ステータスを決定
+            switch(result['wu_execute'])
+            {
+                case 'faital':
+
+                    currentBuild.result = 'FAILURE'
+                    break
+
+                case 'warning':
+
+                    currentBuild.result = 'FAILURE'
+                    break
+
+                case 'nomalend':
+
+                    currentBuild.result = 'SUCCESS'
+                    break
+            }
+        }
+        catch(Exception e) {
+
+            println 'result: NG'
+            throw e
+        }
+
+        println 'result: OK'
+    }
+}}
