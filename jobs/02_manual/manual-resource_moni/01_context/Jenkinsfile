@@ -107,7 +107,7 @@
                 )
 
                 // 判定結果を変数化
-                result.put('wu_execute', 'faital')
+                def result_wu_execute = 'faital'
 
                 break
 
@@ -128,7 +128,7 @@
                 )
 
                 // 判定結果を変数化
-                result.put('wu_execute', 'warning')
+                def result_wu_execute = 'warning'
 
                 break
 
@@ -139,7 +139,7 @@
                 printMsg('info', result['stdout'])
 
                 // 判定結果を変数化
-                result.put('wu_execute', 'nomalend')
+                def result_wu_execute = 'nomalend'
         }
 
         // 終了メッセージ
@@ -157,7 +157,7 @@
      */
     stage('後処理')
     {
-        println 'パラメータチェック: ' + result
+        println 'パラメータチェック: ' + result_wu_execute
         def result = ['wu_execute': 'warning']
         println 'パラメータチェック: ' + result['wu_execute']
         println 'パラメータチェック: ' + env
