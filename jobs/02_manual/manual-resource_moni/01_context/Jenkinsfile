@@ -26,13 +26,13 @@
         try
         {
             // 応答に制限時間を設定
-            timeout(time: 30, unit: 'SECONDS')
+            timeout(time: 60, unit: 'SECONDS')
             {
                 // ユーザから入力を受け付ける
                 userInput = input(
                     message        : '''\
                                      |リソース取得先サーバを選択してください。
-                                     |（応答時間：30秒）'''.stripMargin(),
+                                     |（応答時間：60秒）'''.stripMargin(),
                     ok             : '選択する',
                     parameters     : [
                         choice(
