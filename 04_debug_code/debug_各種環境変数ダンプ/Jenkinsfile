@@ -39,9 +39,6 @@ node('master') { timestamps
 
             printMsg('info','環境変数一覧')
             env.each { println it }
-
-            printMsg('info','環境変数一覧（要素番号付き）')
-            env.eachWithIndex { val,i -> println "index:${i} value:${val}" }
         }
         catch(Exception e) {
 
@@ -78,8 +75,8 @@ node('master') { timestamps
                 'number',
                 'result',
                 'currentResult',
-                'resultIsBetterOrEqualTo',
-                'resultIsWorseOrEqualTo',
+                //'resultIsBetterOrEqualTo',
+                //'resultIsWorseOrEqualTo',
                 'displayName',
                 'description',
                 'id',
