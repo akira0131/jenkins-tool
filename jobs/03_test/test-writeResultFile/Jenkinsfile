@@ -8,17 +8,14 @@ node('master') { timestamps
     {
         // 書込対象のファイル
         temp = ['path':'/opt/var/jenkins/temp', 'file':'result_test-case-1.yml']
-
         // ファイルが存在していた場合、削除
         File f = new File(temp['path'] + "/" + temp['file'])
         if(f.exists())
         {
             f.delete()
         }
-
         // 書込対象のファイル
         temp = ['path':'/opt/var/jenkins/temp', 'file':'result_test-case-2.yml']
-
         // ファイルが存在していた場合、削除
         File ff = new File(temp['path'] + "/" + temp['file'])
         if(ff.exists())
@@ -26,31 +23,23 @@ node('master') { timestamps
             ff.delete()
         }
     }
-
-    /**  UT試験
-     *  期待する動作：引数に渡した変数がYaml形式のファイルに書き込まれること。
-     */
     stage('test-case-1')
     {
+        printMsg('info', '期待する動作：引数で渡した変数がファイルの書き出しに成功すること。')
         try
         {
             result = ['webap': 'faital']
             writeResultFile(result, 'test-case-1')
         }
         catch(Exception e) {
-
             println 'result: NG'
             throw e
         }
-
         println 'result: OK'
     }
-
-    /**  UT試験
-      *  期待する動作：引数に渡した変数がYaml形式のファイルに書き込まれること。
-      */
     stage('test-case-2')
     {
+        printMsg('info', '期待する動作：引数で渡した変数がファイルの書き出しに成功すること。')
         try
         {
             server = 'batch'
@@ -58,18 +47,14 @@ node('master') { timestamps
             writeResultFile(result, 'test-case-2')
         }
         catch(Exception e) {
-
             println 'result: NG'
             throw e
         }
-
         println 'result: OK'
     }
-    /**  UT試験
-      *  期待する動作：既に存在しているファイルは削除され、新たに引数に渡した変数で書き込まれること。
-      */
     stage('test-case-3')
     {
+        printMsg('info', '期待する動作：既に存在しているファイルは削除され、新たに引数に渡した変数でファイルの書き出しに成功すること。')
         try
         {
             server = 'batch'
@@ -77,11 +62,23 @@ node('master') { timestamps
             writeResultFile(result, 'test-case-2')
         }
         catch(Exception e) {
-
             println 'result: NG'
             throw e
         }
-
+        println 'result: OK'
+    }
+    stage('test-case-4')
+    {
+        printMsg('info', '期待する動作：改行を含んでいる変数を引数で渡してもファイルの書き出しに成功すること。')
+        try
+        {
+            result = ['stodout': 'nomal\nwarning']
+            writeResultFile(result, 'test-case-2')
+        }
+        catch(Exception e) {
+            println 'result: NG'
+            throw e
+        }
         println 'result: OK'
     }
 }}
