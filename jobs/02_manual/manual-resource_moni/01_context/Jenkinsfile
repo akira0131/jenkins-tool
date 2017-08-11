@@ -79,26 +79,26 @@
         printMsg('info', '-------------------------------------------------------')
 
         // AP設定ロード
-        def env = loadEnvConfig()
+        def config = loadAppConfig()
 
-        // リソース取得シェル実行
+        // リソース取得
         def result = sshCmd(server, 'ls /opt/app/lib')
 
         // 標準エラーが返却されている場合は、例外を投げる
         assert result['stderror'] == null
 
-        // WU起動数結果判定
+        // リソース結果判定
         switch(true)
         {
             // 危険域
-            case(result['stdout'].contains(env.resource.monitor.wu.execute.faital.keyword)) as Boolean:
+            case(result['stdout'].contains(config.resource.monitor.wu.execute.faital.keyword)) as Boolean:
 
-                // コマンド結果を標準出力
+                // リソース取得結果をコンソールに出力
                 printMsg('warning', result['stdout'])
 
                 // メール通知
                 emailext(
-                    to       : env.mail.address.debug,
+                    to       : config.mail.address.debug,
                     subject  : '${DEFAULT_SUBJECT}ABORT',
                     body     : '''<p>ジョブ走行中に予期せぬエラーが発生しました。</p>
                                   <p>解析をお願いします。</p>''',
@@ -112,14 +112,14 @@
                 break
 
             // 注意域
-            case(result['stdout'].contains(env.resource.monitor.wu.execute.warning.keyword)) as Boolean:
+            case(result['stdout'].contains(config.resource.monitor.wu.execute.warning.keyword)) as Boolean:
 
-                // コマンド結果を標準出力
+                // リソース取得結果をコンソールに出力
                 printMsg('warning', result['stdout'])
 
                 // メール通知
                 emailext(
-                    to       : env.mail.address.debug,
+                    to       : config.mail.address.debug,
                     subject  : '${DEFAULT_SUBJECT}ABORT',
                     body     : '''<p>ジョブ走行中に予期せぬエラーが発生しました。</p>
                                   <p>解析をお願いします。</p>''',
@@ -130,12 +130,16 @@
                 // 判定結果をジョブ終了ステータスに反映
                 currentBuild.result = 'FAILURE'
 
+                // 判定結果をファイルに出力
+                result.put('wu_execute', 'warning')
+                writeDataToFile(result, 'result_' + currentBuild.displayName + '_' + server)
+
                 break
 
             // 正常域
             default:
 
-                // コマンド結果を標準出力
+                // リソース取得結果をコンソールに出力
                 printMsg('info', result['stdout'])
 
                 // 判定結果をジョブ終了ステータスに反映
@@ -159,6 +163,6 @@
     stage('後処理')
     {
         // ジョブ結果をファイルに出力
-        writeDataToFile(result, 'result_resource_monitor_' + server)
+        //writeDataToFile(result, 'result_resource_monitor_' + server)
     }
 }}
