@@ -146,17 +146,7 @@ def result_wu_execute = 'warning'
         printMsg('info', '-------------------------------------------------------')
         printMsg('info', 'WU起動数判定ステージ FINISH')
         printMsg('info', '-------------------------------------------------------')
-    }
 
-   /** WU起動数判定ステージ
-     * ・
-     * ・
-     * ・
-     * ・
-     * ・
-     */
-    stage('後処理')
-    {
         println 'パラメータチェック: ' + result_wu_execute
         def result = ['wu_execute': 'warning']
         println 'パラメータチェック: ' + result['wu_execute']
