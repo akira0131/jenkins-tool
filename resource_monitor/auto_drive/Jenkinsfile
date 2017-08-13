@@ -29,7 +29,7 @@ node('master') { timestamps
                     )
 
                     // ジョブ実行結果をコンソールに出力
-                    showJobResult('wu_execute_cnt_' + server, 'stdout')
+                    //ReadFile('wu_execute_cnt_' + server, 'stdout')
 
                     // ジョブ判定結果取得
                     result = readDataToFile('wu_execute_cnt_' + server)
@@ -38,7 +38,7 @@ node('master') { timestamps
                 catch(Exception e)
                 {
                     // ジョブ実行結果をコンソールに出力
-                    showJobResult('wu_execute_cnt_' + server, 'stderror')
+                    //showJobResult('wu_execute_cnt_' + server, 'stderror')
                     throw e
                 }
             }
