@@ -91,7 +91,7 @@
         switch(true)
         {
             // 標準エラー出力が返却されている場合
-            case(buffer['stderror'] == null) as boolean:
+            case(buffer['stderror'] != null) as boolean:
 
                 // 標準エラー出力をコンソールに出力
                 printMsg('warning', buffer['stderror'])
