@@ -11,58 +11,56 @@
      * ・
      * ・
      */
-    stage('ジョブパラメータ取得')
+    stage('ジョブパラメータセット')
     {
-        try
-        {
-            // 仮の値（null）をセット
-            def server = null
-        }
-        catch(MissingPropertyException e)
+        if(server != null)
         {
             // 呼び出されたジョブから引き継いだパラメータで後続ステージに進む
             printMsg('info', 'ジョブパラメータ「server」に「' + server + '」がセットされました。')
         }
-        try
+        else
         {
-            // 応答に制限時間を設定
-            timeout(time: 60, unit: 'SECONDS')
+            try
             {
-                // ユーザから入力を受け付ける
-                userInput = input(
-                    message        : '''\
-                                     |リソース取得先サーバを選択してください。
-                                     |（応答時間：60秒）'''.stripMargin(),
-                    ok             : '選択する',
-                    parameters     : [
-                        choice(
-                            name   : 'リソース取得先サーバ名:',
-                            choices: 'web/apサーバ\nバッチサーバ'
-                        )
-                    ]
-                )
+                // 応答に制限時間を設定
+                timeout(time: 60, unit: 'SECONDS')
+                {
+                    // ユーザから入力を受け付ける
+                    userInput = input(
+                        message        : '''\
+                                         |リソース取得先サーバを選択してください。
+                                         |（応答時間：60秒）'''.stripMargin(),
+                        ok             : '選択する',
+                        parameters     : [
+                            choice(
+                                name   : 'リソース取得先サーバ名:',
+                                choices: 'web/apサーバ\nバッチサーバ'
+                            )
+                        ]
+                    )
+                }
             }
-        }
-        catch(Exception e)
-        {
-            // 制限時間内に変数の中身がnullから変わっていない場合は、例外を投げる
-            printMsg('error', '入力されたパラメータが確認できません。応答時間内にリソース取得先サーバを選択してください。')
-            throw e
-        }
+            catch(Exception e)
+            {
+                // 制限時間内に変数の中身がnullから変わっていない場合は、例外を投げる
+                printMsg('error', '入力されたパラメータが確認できません。応答時間内にリソース取得先サーバを選択してください。')
+                throw e
+            }
 
-        printMsg('info','入力されたパラメータをチェックします。')
+            printMsg('info','入力されたパラメータをチェックします。')
 
-        // 入力されたデータに合わせて、処理用の値をセット
-        if(userInput == 'web/apサーバ')
-        {
-            server = 'webap'
-        }
-        if(userInput == 'バッチサーバ')
-        {
-            server = 'batch'
-        }
+            // 入力されたデータに合わせて、処理用の値をセット
+            if(userInput == 'web/apサーバ')
+            {
+                server = 'webap'
+            }
+            if(userInput == 'バッチサーバ')
+            {
+                server = 'batch'
+            }
 
-        printMsg('info', 'ジョブパラメータ「server」に「' + server + '」がセットされました。')
+            printMsg('info', 'ジョブパラメータ「server」に「' + server + '」がセットされました。')
+        }
     }
 
    /** WU起動数判定ステージ
@@ -74,27 +72,41 @@
      */
     stage('WU起動数判定[' + server + ']')
     {
+        // 開始メッセージ
         printMsg('info', '-------------------------------------------------------')
-        printMsg('info', 'WU起動数判定ステージ START')
+        printMsg('info', 'STAGE: WU起動数判定')
         printMsg('info', '-------------------------------------------------------')
+        printMsg('info', 'Job Name: resource_monitor/wu_execute_cnt')
+        printMsg('info', 'Job Param: server = ' + server)
 
         // AP設定ロード
         def config = loadAppConfig()
 
-        // リソース取得
-        def result = sshCmd(server, 'ls /opt/app/lib')
+        // リソース取得実行
+        def buffer = sshCmd(server, 'ls /opt/app/lib')
 
-        // 標準エラーが返却されている場合は、例外を投げる
-        assert result['stderror'] == null
-
-        // リソース結果判定
+        // リソース判定
         switch(true)
         {
+            // 標準エラー出力が返却されている場合
+            case(buffer['stderror'].size() != 0) as boolean:
+
+                // 標準エラー出力をコンソールに出力
+                printMsg('warning', buffer['stderror'])
+
+                // 異常終了させる
+
+                break
+
             // 危険域
-            case(result['stdout'].contains(config.resource.monitor.wu.execute.faital.keyword)) as Boolean:
+            case(buffer['stdout'].contains(config.resource.monitor.wu.execute.faital.keyword)) as Boolean:
 
                 // リソース取得結果をコンソールに出力
-                printMsg('warning', result['stdout'])
+                printMsg('warning', buffer['stdout'])
+
+                // 判定結果をファイルに出力
+                def result = ['wu_execute_cnt', 'faital']
+                writeDataToFile(result, 'wu_execute_cnt_' + server)
 
                 // メール通知
                 emailext(
@@ -105,21 +117,18 @@
                     attachLog: false,
                     mimeType : 'text/html'
                 )
-
-                // 判定結果をジョブ終了ステータスに反映
-                currentBuild.result = 'FAILURE'
-
-                // 判定結果をファイルに出力
-                result.put('wu_execute', 'faital')
-                writeDataToFile(result['wu_execute'], 'result_' + JOB_NAME + '_' + server)
 
                 break
 
             // 注意域
-            case(result['stdout'].contains(config.resource.monitor.wu.execute.warning.keyword)) as Boolean:
+            case(buffer['stdout'].contains(config.resource.monitor.wu.execute.warning.keyword)) as Boolean:
 
                 // リソース取得結果をコンソールに出力
-                printMsg('warning', result['stdout'])
+                printMsg('warning', buffer['stdout'])
+
+                // 判定結果をファイルに出力
+                def result = ['wu_execute_cnt', 'warning']
+                writeDataToFile(result, 'wu_execute_cnt_' + server)
 
                 // メール通知
                 emailext(
@@ -130,13 +139,6 @@
                     attachLog: false,
                     mimeType : 'text/html'
                 )
-
-                // 判定結果をジョブ終了ステータスに反映
-                currentBuild.result = 'FAILURE'
-
-                // 判定結果をファイルに出力
-                result.put('wu_execute', 'warning')
-                writeDataToFile(result['wu_execute'], 'result_' + JOB_NAME + '_' + server)
 
                 break
 
@@ -144,21 +146,14 @@
             default:
 
                 // リソース取得結果をコンソールに出力
-                printMsg('info', result['stdout'])
-
-                // 判定結果をジョブ終了ステータスに反映
-                currentBuild.result = 'SUCCESS'
+                printMsg('info', buffer['stdout'])
 
                 // 判定結果をファイルに出力
-                result.put('wu_execute', 'normalend')
-                writeDataToFile(result['wu_execute'], 'result_' + JOB_NAME + '_' + server)
+                def result = ['wu_execute_cnt', 'normalend']
+                writeDataToFile(result, 'wu_execute_cnt_' + server)
 
                 break
         }
-
-        printMsg('info', '-------------------------------------------------------')
-        printMsg('info', 'WU起動数判定ステージ FINISH')
-        printMsg('info', '-------------------------------------------------------')
     }
 
    /** WU起動数判定ステージ
