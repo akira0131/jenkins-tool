@@ -4,7 +4,8 @@
 
 node('master') { timestamps
 {
-    for (server in ['webap', 'batch'])
+    serverList = ['webap', 'batch']
+    for (server in serverList)
     {
         serverList[ server ] =
         {
