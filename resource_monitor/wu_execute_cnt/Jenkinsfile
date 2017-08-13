@@ -72,7 +72,7 @@
      * ・
      * ・
      */
-    stage('WU起動数判定[' + server + ']')
+    stage('WU起動数判定')
     {
         // 開始メッセージ
         printMsg('info', '-------------------------------------------------------')
@@ -96,6 +96,9 @@
                 // 標準エラー出力をコンソールに出力
                 printMsg('warning', buffer['stderror'])
 
+                // 標準エラー出力をファイルに出力
+                WriteBufferToFile(buffer['stderror'],'ssh_cmd_stderror_' + server)
+
                 // 異常終了させる
 
                 break
@@ -105,6 +108,9 @@
 
                 // リソース取得結果をコンソールに出力
                 printMsg('warning', buffer['stdout'])
+
+                // 標準エラー出力をファイルに出力
+                WriteBufferToFile(buffer['stdout'],'ssh_cmd_stdout_' + server)
 
                 // 判定結果をファイルに出力
                 def result = ['wu_execute_cnt', 'faital']
@@ -128,6 +134,9 @@
                 // リソース取得結果をコンソールに出力
                 printMsg('warning', buffer['stdout'])
 
+                // 標準エラー出力をファイルに出力
+                WriteBufferToFile(buffer['stdout'],'ssh_cmd_stdout_' + server)
+
                 // 判定結果をファイルに出力
                 def result = ['wu_execute_cnt', 'warning']
                 writeDataToFile(result, 'wu_execute_cnt_' + server)
@@ -149,6 +158,9 @@
 
                 // リソース取得結果をコンソールに出力
                 printMsg('info', buffer['stdout'])
+
+                // 標準エラー出力をファイルに出力
+                WriteBufferToFile(buffer['stdout'],'ssh_cmd_stdout_' + server)
 
                 // 判定結果をファイルに出力
                 def result = ['wu_execute_cnt', 'normalend']
