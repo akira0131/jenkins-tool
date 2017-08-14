@@ -115,7 +115,7 @@
                 writeResultToFile(result, 'wu_execute_cnt_' + server)
 
                 // メール通知
-                printMsg('info', '判定結果をメール通知します。')
+                printMsg('info', '危険域のため、判定結果をメール通知します。')
                 emailext(
                     to       : config.mail.address.debug,
                     subject  : '${DEFAULT_SUBJECT}ABORT',
@@ -138,7 +138,7 @@
                 writeResultToFile(result, 'wu_execute_cnt_' + server)
 
                 // メール通知
-                printMsg('info', '判定結果をメール通知します。')
+                printMsg('info', '注意域のため、判定結果をメール通知します。')
                 emailext(
                     to       : config.mail.address.debug,
                     subject  : '${DEFAULT_SUBJECT}ABORT',
@@ -159,6 +159,9 @@
                 // ジョブ結果をファイルに出力
                 result.put('wu_execute_cnt', 'normalend')
                 writeResultToFile(result, 'wu_execute_cnt_' + server)
+
+                // メール通知しない
+                printMsg('info', '正常域のため、メール通知はスキップします。')
 
                 break
         }
