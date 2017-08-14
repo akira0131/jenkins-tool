@@ -107,7 +107,7 @@
                 printMsg('warning', result['stdout'])
 
                 // 判定結果をファイルに出力
-                def result = ['wu_execute_cnt', 'faital']
+                result = ['wu_execute_cnt', 'faital']
                 writeDataToFile(result, 'wu_execute_cnt_' + server)
 
                 // メール通知
@@ -129,7 +129,7 @@
                 printMsg('warning', result['stdout'])
 
                 // 判定結果をファイルに出力
-                def result = ['wu_execute_cnt', 'warning']
+                result = ['wu_execute_cnt', 'warning']
                 writeDataToFile(result, 'wu_execute_cnt_' + server)
 
                 // メール通知
@@ -151,7 +151,7 @@
                 printMsg('info', result['stdout'])
 
                 // 判定結果をファイルに出力
-                def result = ['wu_execute_cnt', 'normalend']
+                result = ['wu_execute_cnt', 'normalend']
                 writeDataToFile(result, 'wu_execute_cnt_' + server)
 
                 break
