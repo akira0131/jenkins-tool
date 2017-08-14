@@ -17,14 +17,7 @@
         {
             // 仮の値（null）をセット
             def server = null
-        }
-        catch(MissingPropertyException e)
-        {
-            // 呼び出されたジョブから引き継いだパラメータで後続ステージに進む
-            printMsg('info', 'ジョブパラメータ「server」に「' + server + '」がセットされました。')
-        }
-        try
-        {
+
             // 応答に制限時間を設定
             timeout(time: 60, unit: 'SECONDS')
             {
@@ -42,6 +35,26 @@
                     ]
                 )
             }
+
+            printMsg('info','入力されたパラメータをチェックします。')
+
+            // 入力されたデータに合わせて、処理用の値をセット
+            if(userInput == 'web/apサーバ')
+            {
+                server = 'webap'
+            }
+            if(userInput == 'バッチサーバ')
+            {
+                server = 'batch'
+            }
+
+            printMsg('info', 'ジョブパラメータ「server」に「' + server + '」がセットされました。')
+
+        }
+        catch(MissingPropertyException e)
+        {
+            // 呼び出されたジョブから引き継いだパラメータで後続ステージに進む
+            printMsg('info', 'ジョブパラメータ「server」に「' + server + '」がセットされました。')
         }
         catch(Exception e)
         {
@@ -49,20 +62,6 @@
             printMsg('error', '入力されたパラメータが確認できません。応答時間内にリソース取得先サーバを選択してください。')
             throw e
         }
-
-        printMsg('info','入力されたパラメータをチェックします。')
-
-        // 入力されたデータに合わせて、処理用の値をセット
-        if(userInput == 'web/apサーバ')
-        {
-            server = 'webap'
-        }
-        if(userInput == 'バッチサーバ')
-        {
-            server = 'batch'
-        }
-
-        printMsg('info', 'ジョブパラメータ「server」に「' + server + '」がセットされました。')
     }
 
    /** WU起動数判定ステージ
@@ -76,7 +75,7 @@
     {
         // 開始メッセージ
         printMsg('info', '-------------------------------------------------------')
-        printMsg('info', 'STAGE: WU起動数判定')
+        printMsg('info', 'WU起動数判定')
         printMsg('info', '-------------------------------------------------------')
         printMsg('info', 'Job Name: resource_monitor/wu_execute_cnt')
         printMsg('info', 'Job Param: server = ' + server)
@@ -85,7 +84,8 @@
         def config = loadAppConfig()
 
         // リソース取得実行
-        def result = sshCmd(env, server, 'ls /opt/app/lib')
+        printMsg('info', 'リソース取得を実行します。')
+        def result = sshCmd(config, server, 'ls /opt/app/lib')
 
         // リソース判定
         switch(true)
@@ -95,6 +95,10 @@
 
                 // 標準エラー出力をコンソールに出力
                 printMsg('warning', result['stderror'])
+
+                // ジョブ結果をファイルに出力
+                result.put('wu_execute_cnt', 'abort')
+                writeResultToFile(result, 'wu_execute_cnt_' + server)
 
                 // 異常終了させる
 
@@ -106,11 +110,12 @@
                 // リソース取得結果をコンソールに出力
                 printMsg('warning', result['stdout'])
 
-                // 判定結果をファイルに出力
+                // ジョブ結果をファイルに出力
                 result.put('wu_execute_cnt', 'faital')
-                writeDataToFile(result, 'wu_execute_cnt_' + server)
+                writeResultToFile(result, 'wu_execute_cnt_' + server)
 
                 // メール通知
+                printMsg('info', '判定結果をメール通知します。')
                 emailext(
                     to       : config.mail.address.debug,
                     subject  : '${DEFAULT_SUBJECT}ABORT',
@@ -130,9 +135,10 @@
 
                 // 判定結果をファイルに出力
                 result.put('wu_execute_cnt', 'warning')
-                writeDataToFile(result, 'wu_execute_cnt_' + server)
+                writeResultToFile(result, 'wu_execute_cnt_' + server)
 
                 // メール通知
+                printMsg('info', '判定結果をメール通知します。')
                 emailext(
                     to       : config.mail.address.debug,
                     subject  : '${DEFAULT_SUBJECT}ABORT',
@@ -150,9 +156,9 @@
                 // リソース取得結果をコンソールに出力
                 printMsg('info', result['stdout'])
 
-                // 判定結果をファイルに出力
+                // ジョブ結果をファイルに出力
                 result.put('wu_execute_cnt', 'normalend')
-                writeDataToFile(result, 'wu_execute_cnt_' + server)
+                writeResultToFile(result, 'wu_execute_cnt_' + server)
 
                 break
         }
