@@ -85,7 +85,7 @@
         def config = loadAppConfig()
 
         // リソース取得実行
-        def result = sshCmd(server, 'ls /opt/app/lib')
+        def result = sshCmd(env, server, 'ls /opt/app/lib')
 
         // リソース判定
         switch(true)
