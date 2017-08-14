@@ -85,32 +85,26 @@
         def config = loadAppConfig()
 
         // リソース取得実行
-        def buffer = sshCmd(server, 'ls /opt/app/lib')
+        def result = sshCmd(server, 'ls /opt/app/lib')
 
         // リソース判定
         switch(true)
         {
             // 標準エラー出力が返却されている場合
-            case(buffer['stderror'] != null) as boolean:
+            case(result['stderror'] != null) as boolean:
 
                 // 標準エラー出力をコンソールに出力
-                printMsg('warning', buffer['stderror'])
-
-                // 標準エラー出力をファイルに出力
-                writeBufferToFile(buffer['stderror'],'ssh_cmd_stderror_' + server)
+                printMsg('warning', result['stderror'])
 
                 // 異常終了させる
 
                 break
 
             // 危険域
-            case(buffer['stdout'].contains(config.resource.monitor.wu.execute.faital.keyword)) as Boolean:
+            case(result['stdout'].contains(config.resource.monitor.wu.execute.faital.keyword)) as Boolean:
 
                 // リソース取得結果をコンソールに出力
-                printMsg('warning', buffer['stdout'])
-
-                // 標準エラー出力をファイルに出力
-                writeBufferToFile(buffer['stdout'],'ssh_cmd_stdout_' + server)
+                printMsg('warning', result['stdout'])
 
                 // 判定結果をファイルに出力
                 def result = ['wu_execute_cnt', 'faital']
@@ -129,13 +123,10 @@
                 break
 
             // 注意域
-            case(buffer['stdout'].contains(config.resource.monitor.wu.execute.warning.keyword)) as Boolean:
+            case(result['stdout'].contains(config.resource.monitor.wu.execute.warning.keyword)) as Boolean:
 
                 // リソース取得結果をコンソールに出力
-                printMsg('warning', buffer['stdout'])
-
-                // 標準エラー出力をファイルに出力
-                writeBufferToFile(buffer['stdout'],'ssh_cmd_stdout_' + server)
+                printMsg('warning', result['stdout'])
 
                 // 判定結果をファイルに出力
                 def result = ['wu_execute_cnt', 'warning']
@@ -157,10 +148,7 @@
             default:
 
                 // リソース取得結果をコンソールに出力
-                printMsg('info', buffer['stdout'])
-
-                // 標準エラー出力をファイルに出力
-                writeBufferToFile(buffer['stdout'],'ssh_cmd_stdout_' + server)
+                printMsg('info', result['stdout'])
 
                 // 判定結果をファイルに出力
                 def result = ['wu_execute_cnt', 'normalend']
